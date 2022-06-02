@@ -3,7 +3,7 @@ package com.example.game.model.entities;
 public class CurrentGame {
 
   private Long id;
-  private Integer[] serverNumber;
+  private String serverNumber;
 
   public CurrentGame() {
   }
@@ -16,11 +16,11 @@ public class CurrentGame {
     this.id = id;
   }
 
-  public Integer[] getServerNumber() {
+  public String getServerNumber() {
     return serverNumber;
   }
 
-  public void setServerNumber(Integer[] serverNumber) {
+  public void setServerNumber(String serverNumber) {
     this.serverNumber = serverNumber;
   }
 }

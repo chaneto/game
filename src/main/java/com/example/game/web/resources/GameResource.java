@@ -4,20 +4,30 @@ import java.time.LocalDateTime;
 
 public class GameResource {
 
-  private LocalDateTime startDate;
+  private Long id;
+  private String serverNumber;
+  private String startDate;
   private Long numberOfAttempts;
-  private LocalDateTime endDate;
+  private String endDate;
   private boolean isCompleted;
 
   public GameResource() {
   }
 
-  public LocalDateTime getStartDate() {
-    return startDate;
+  public Long getId() {
+    return id;
   }
 
-  public void setStartDate(LocalDateTime startDate) {
-    this.startDate = startDate;
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public String getServerNumber() {
+    return serverNumber;
+  }
+
+  public void setServerNumber(String serverNumber) {
+    this.serverNumber = serverNumber;
   }
 
   public Long getNumberOfAttempts() {
@@ -28,11 +38,19 @@ public class GameResource {
     this.numberOfAttempts = numberOfAttempts;
   }
 
-  public LocalDateTime getEndDate() {
+  public String getStartDate() {
+    return startDate;
+  }
+
+  public void setStartDate(String startDate) {
+    this.startDate = startDate;
+  }
+
+  public String getEndDate() {
     return endDate;
   }
 
-  public void setEndDate(LocalDateTime endDate) {
+  public void setEndDate(String endDate) {
     this.endDate = endDate;
   }
 

@@ -1,0 +1,6 @@
+DROP USER IF EXISTS chaneto;
+DROP DATABASE IF EXISTS games_db;
+
+CREATE USER chaneto with PASSWORD '12345';
+CREATE DATABASE games_db with OWNER chaneto;
+GRANT ALL PRIVILEGES ON DATABASE games_db TO chaneto;

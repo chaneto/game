@@ -6,13 +6,16 @@ import com.example.game.exceptions.LoginException;
 import com.example.game.exceptions.UsernameException;
 import com.example.game.exceptions.NotFoundException;
 import com.example.game.exceptions.ValidationException;
-import com.example.game.model.entities.CurrentUser;
 import com.example.game.model.entities.Game;
 import com.example.game.model.entities.User;
 import com.example.game.repositories.UserRepository;
 import com.example.game.services.UserService;
 import com.example.game.web.resources.UserBestGameResource;
 import com.example.game.web.resources.UserCreateResource;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
@@ -20,12 +23,12 @@ import org.springframework.validation.BindingResult;
 public class UserServiceImpl implements UserService {
 
   private final UserRepository userRepository;
-  private final CurrentUser currentUser;
+  private final GameUserDetailService gameUserDetailService;
 
   public UserServiceImpl(UserRepository userRepository,
-    CurrentUser currentUser) {
+    GameUserDetailService gameUserDetailService) {
     this.userRepository = userRepository;
-    this.currentUser = currentUser;
+    this.gameUserDetailService = gameUserDetailService;
   }
 
   @Override
@@ -58,16 +61,23 @@ public class UserServiceImpl implements UserService {
         throw new LoginException("Wrong user or password!!!");
       }
     }
-
-    this.currentUser.setId(user.getId());
-    this.currentUser.setUsername(user.getUsername());
+    authenticate(userCreateResource);
     return user;
   }
 
   @Override
   public List<Game> getAllUserGames() {
-    User user = this.userRepository.findByUsername(this.currentUser.getUsername());
+    User user = this.userRepository.findByUsername(getCurrentUser().getUsername());
     return user.getGames();
+  }
+
+  public User getCurrentUser(){
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    if(authentication.getName().equals("anonymousUser")){
+      throw new LoginException("There is no logged user");
+    }
+    UserDetails userDetails = (UserDetails)authentication.getPrincipal();
+    return this.userRepository.findByUsername(userDetails.getUsername());
   }
 
   @Override
@@ -79,11 +89,6 @@ public class UserServiceImpl implements UserService {
       }
     }
     return messages;
-  }
-
-  @Override public void logout() {
-    this.currentUser.setId(null);
-    this.currentUser.setUsername(null);
   }
 
   @Override
@@ -106,5 +111,12 @@ public class UserServiceImpl implements UserService {
       userBestGameResources.add(userBestGameResource);
     }
     return userBestGameResources;
+  }
+
+  public void authenticate(UserCreateResource userCreateResource) {
+    UserDetails principal = this.gameUserDetailService.loadUserByUsername(userCreateResource.getUsername());
+    Authentication authentication = new UsernamePasswordAuthenticationToken(
+      principal, userCreateResource.getPassword(), principal.getAuthorities());
+    SecurityContextHolder.getContext().setAuthentication(authentication);
   }
 }

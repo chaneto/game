@@ -7,6 +7,7 @@ import com.example.game.model.entities.User;
 import com.example.game.services.UserService;
 import com.example.game.web.assembler.GameAssembler;
 import com.example.game.web.assembler.UserAssembler;
+import com.example.game.web.resources.GameResource;
 import com.example.game.web.resources.UserCreateResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,18 +41,13 @@ public class UserController {
     return new ResponseEntity<>(this.userAssembler.assembleUserResource(user), HttpStatus.OK);
   }
 
-  @PostMapping("/logout")
-  public void logout(){
-    this.userService.logout();
-  }
-
   @GetMapping("/games")
-  public ResponseEntity<?> getAllUserGame(){
+  public List<GameResource> getAllUserGame(){
     List<Game> games = this.userService.getAllUserGames();
-    return new ResponseEntity<>(this.gameAssembler.assembleGamesResource(games), HttpStatus.OK);
+    return this.gameAssembler.assembleGamesResource(games);
   }
 
-  @GetMapping("/home")
+  @GetMapping("/all")
   public ResponseEntity<?> getAllUserWithBestGame(){
      return new ResponseEntity<>(this.userService.getAllUserWithBestGame(), HttpStatus.OK);
   }

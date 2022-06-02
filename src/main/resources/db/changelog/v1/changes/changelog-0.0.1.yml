@@ -1,0 +1,65 @@
+databaseChangeLog:
+  - changeSet:
+      id: create table
+      author: Stoyan Stoyanov
+      logicalFilePath: src/main/resources/db/changelog/v1/changes/changelog-0.0.1.yml
+      context: default
+      changes:
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: username
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: password
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: games
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: server_number
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: start_date
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: number_of_attempts
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: end_date
+                  type: TIMESTAMP
+              - column:
+                  name: is_completed
+                  type: BOOLEAN
+                  constraints:
+                    nullable: false
+
+
+

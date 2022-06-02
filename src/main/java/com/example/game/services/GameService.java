@@ -13,5 +13,7 @@ public interface GameService {
 
   List<CowsAndBulls> compare(NumberResource currentNumber, BindingResult bindingResult);
 
-  Integer[] getFourDigitsNumber();
+  String getFourDigitsNumber();
+
+  Game continueGame(Long id);
 }

@@ -24,8 +24,8 @@ public class GameController {
     this.gameAssembler = gameAssembler;
   }
 
-  @GetMapping("/history")
-  public ResponseEntity<?> getGameHistory(Long id){
+  @GetMapping("/history/{id}")
+  public ResponseEntity<?> getGameHistory(@PathVariable Long id){
     List<CowsAndBulls> cowsAndBulls = this.gameService.getGameHistory(id);
     return new ResponseEntity<>(this.gameAssembler.assembleCowsAndBullsResource(cowsAndBulls), HttpStatus.OK);
   }
@@ -39,5 +39,10 @@ public class GameController {
   public ResponseEntity<?> compare(@RequestBody @Valid NumberResource numberResource, BindingResult bindingResult){
     List<CowsAndBulls> cowsAndBulls = this.gameService.compare(numberResource, bindingResult);
     return new ResponseEntity<>(this.gameAssembler.assembleCowsAndBullsResource(cowsAndBulls), HttpStatus.OK);
+  }
+
+  @GetMapping("/continue/{id}")
+  public ResponseEntity<?> gameContinue(@PathVariable  Long id){
+    return new ResponseEntity<>(this.gameAssembler.assembleGameResource(this.gameService.continueGame(id)), HttpStatus.CREATED);
   }
 }

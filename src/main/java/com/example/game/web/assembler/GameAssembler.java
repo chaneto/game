@@ -1,5 +1,6 @@
 package com.example.game.web.assembler;
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import com.example.game.model.entities.CowsAndBulls;
@@ -12,9 +13,16 @@ import org.springframework.stereotype.Component;
 public class GameAssembler {
 
   public GameResource assembleGameResource(Game game){
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     GameResource gameResource = new GameResource();
-    gameResource.setStartDate(game.getStartDate());
-    gameResource.setEndDate(game.getEndDate());
+    gameResource.setId(game.getId());
+    gameResource.setServerNumber(game.getServerNumber());
+    if(game.getStartDate() != null){
+    gameResource.setStartDate(game.getStartDate().format(formatter));
+    }
+    if(game.getEndDate() != null){
+    gameResource.setEndDate(game.getEndDate().format(formatter));
+    }
     gameResource.setCompleted(game.isCompleted());
     gameResource.setNumberOfAttempts(game.getNumberOfAttempts());
     return gameResource;

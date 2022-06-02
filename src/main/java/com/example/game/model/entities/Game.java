@@ -17,7 +17,7 @@ public class Game {
 
   @Column(name = "server_number", nullable = false)
   @Size(min = 4, max = 4, message = "Number must be exactly 4 digits!!!")
-  private Integer[] serverNumber;
+  private String serverNumber;
 
   @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   @Column(name = "start_date", nullable = false)
@@ -51,11 +51,11 @@ public class Game {
     this.id = id;
   }
 
-  public Integer[] getServerNumber() {
+  public String getServerNumber() {
     return serverNumber;
   }
 
-  public void setServerNumber(Integer[] serverNumber) {
+  public void setServerNumber(String serverNumber) {
     this.serverNumber = serverNumber;
   }
 

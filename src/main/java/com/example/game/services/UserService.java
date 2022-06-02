@@ -21,5 +21,6 @@ public interface UserService {
 
   List<String> getAllBindingsErrors(BindingResult bindingResult);
 
-  void logout();
+  User getCurrentUser();
+
 }

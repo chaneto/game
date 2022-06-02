@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Cows and Bulls</title>
+    <link rel="stylesheet" href="/css/style.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script type="module" src="/js/src/app.js"></script>
+   <!-- <script type="module" src="/.js/src/view/addProduct.js"></script> -->
+</head>
+<body>
+<div class="container" id="container">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark ">
+        <a class="navbar-brand text-light" href="/">
+            <img src="/img/home.png" width="40px" alt="Logo picture">
+        </a>
+
+        <ul class="navbar-nav ml-auto ">
+            <!--Users and Guest-->
+            <li class="nav-item"><a id="dashboard" class="nav-link" href=#>Dashboard</a></li>
+            <!--Only Guest-->
+            <div id="guest">
+                <li class="nav-item"><a id="login" class="nav-link" href=#>Login</a></li>
+                <li class="nav-item"><a id="register" class="nav-link" href=#>Register</a></li>
+            </div>
+            <!--Only Users-->
+            <div id="user">
+                <li class="nav-item"><a id="newGame" class="nav-link" href=#>Start Game</a></li>
+                <li class="nav-item"><a id="logout" class="nav-link" href=#>Logout</a></li>
+                <li class="nav-item"><a id="games" class="nav-link" href=#>Your games</a></li>
+            </div>
+        </ul>
+    </nav>
+
+    <section id="home-page">
+        <div class="jumbotron jumbotron-fluid text-light" style="background-color: #343a40;">
+            <img src="/img/index.png"
+                 class="img-fluid" alt="Responsive image" style="width: 150%; height: 200px">
+            <h1 class="display-4">Cows and Bulls Game</h1>
+           <!-- <p class="lead">Unlimited computer, monitor, TV, and more.</p> -->
+        </div>
+    </section>
+
+    <footer class="page-footer font-small">
+        <div class="footer-copyright text-center py-3">© 2022
+            <a href="#" class="text-dark">
+                Applications</a>
+        </div>
+    </footer>
+</div>
+
+</body>
+</html>
