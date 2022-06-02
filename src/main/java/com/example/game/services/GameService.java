@@ -16,4 +16,6 @@ public interface GameService {
   String getFourDigitsNumber();
 
   Game continueGame(Long id);
+
+  List<Game> findAllByUserId();
 }

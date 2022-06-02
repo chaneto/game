@@ -2,7 +2,7 @@ import { html, render } from "../../node_modules/lit-html/lit-html.js";
 import { gamePage } from "./continueGamePage.js";
 import { gamePageHistory } from "./gameHistory.js";
 const main = document.getElementById("home-page");
-const url = "http://localhost:8000/users/games";
+const url = "http://localhost:8000/games";
 
 const gameTemplate = (games, onContinue, onHistory) => html`
 <h1 class="text-center">Your Games</h1>

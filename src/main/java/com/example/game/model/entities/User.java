@@ -24,6 +24,9 @@ public class User {
   @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
   private List<Game> games = new ArrayList<>();
 
+  @OneToOne
+  private Game currentGame;
+
   public User() {
   }
 
@@ -57,5 +60,13 @@ public class User {
 
   public void setGames(List<Game> games) {
     this.games = games;
+  }
+
+  public Game getCurrentGame() {
+    return currentGame;
+  }
+
+  public void setCurrentGame(Game currentGame) {
+    this.currentGame = currentGame;
   }
 }

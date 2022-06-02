@@ -1,7 +1,5 @@
 package com.example.game.web.resources;
 
-import java.time.LocalDateTime;
-
 public class GameResource {
 
   private Long id;

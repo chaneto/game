@@ -13,8 +13,6 @@ public interface UserService {
 
   User userLogin(UserCreateResource userCreateResource, BindingResult bindingResult);
 
-  List<Game> getAllUserGames();
-
   User getUserByUsername(String username);
 
   List<UserBestGameResource> getAllUserWithBestGame();
@@ -22,5 +20,7 @@ public interface UserService {
   List<String> getAllBindingsErrors(BindingResult bindingResult);
 
   User getCurrentUser();
+
+  void setCurrentGame(Game currentGame, Long id);
 
 }

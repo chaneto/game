@@ -3,8 +3,10 @@ package com.example.game.web;
 import java.util.List;
 import javax.validation.Valid;
 import com.example.game.model.entities.CowsAndBulls;
+import com.example.game.model.entities.Game;
 import com.example.game.services.GameService;
 import com.example.game.web.assembler.GameAssembler;
+import com.example.game.web.resources.GameResource;
 import com.example.game.web.resources.NumberResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,6 +41,12 @@ public class GameController {
   public ResponseEntity<?> compare(@RequestBody @Valid NumberResource numberResource, BindingResult bindingResult){
     List<CowsAndBulls> cowsAndBulls = this.gameService.compare(numberResource, bindingResult);
     return new ResponseEntity<>(this.gameAssembler.assembleCowsAndBullsResource(cowsAndBulls), HttpStatus.OK);
+  }
+
+  @GetMapping
+  public List<GameResource> getAllUserGame(){
+    List<Game> games = this.gameService.findAllByUserId();
+    return this.gameAssembler.assembleGamesResource(games);
   }
 
   @GetMapping("/continue/{id}")

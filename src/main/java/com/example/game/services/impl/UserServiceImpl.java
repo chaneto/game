@@ -65,12 +65,6 @@ public class UserServiceImpl implements UserService {
     return user;
   }
 
-  @Override
-  public List<Game> getAllUserGames() {
-    User user = this.userRepository.findByUsername(getCurrentUser().getUsername());
-    return user.getGames();
-  }
-
   public User getCurrentUser(){
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     if(authentication.getName().equals("anonymousUser")){
@@ -78,6 +72,10 @@ public class UserServiceImpl implements UserService {
     }
     UserDetails userDetails = (UserDetails)authentication.getPrincipal();
     return this.userRepository.findByUsername(userDetails.getUsername());
+  }
+
+  @Override public void setCurrentGame(Game currentGame, Long id) {
+    this.userRepository.setCurrentGame(currentGame, id);
   }
 
   @Override

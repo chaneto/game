@@ -1,13 +1,10 @@
 package com.example.game.web;
 
-import java.util.List;
 import javax.validation.Valid;
-import com.example.game.model.entities.Game;
 import com.example.game.model.entities.User;
 import com.example.game.services.UserService;
 import com.example.game.web.assembler.GameAssembler;
 import com.example.game.web.assembler.UserAssembler;
-import com.example.game.web.resources.GameResource;
 import com.example.game.web.resources.UserCreateResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,12 +36,6 @@ public class UserController {
   public ResponseEntity<?> login(@RequestBody @Valid UserCreateResource userCreateResource, BindingResult bindingResult){
     User user = this.userService.userLogin(userCreateResource, bindingResult);
     return new ResponseEntity<>(this.userAssembler.assembleUserResource(user), HttpStatus.OK);
-  }
-
-  @GetMapping("/games")
-  public List<GameResource> getAllUserGame(){
-    List<Game> games = this.userService.getAllUserGames();
-    return this.gameAssembler.assembleGamesResource(games);
   }
 
   @GetMapping("/all")
