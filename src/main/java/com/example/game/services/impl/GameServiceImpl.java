@@ -1,7 +1,5 @@
 package com.example.game.services.impl;
 
-import static liquibase.util.StringUtil.isNumeric;
-
 import java.time.LocalDateTime;
 import java.util.*;
 import com.example.game.exceptions.UnauthorizedException;
@@ -90,25 +88,30 @@ public class GameServiceImpl implements GameService {
         this.userService.getAllBindingsErrors(bindingResult).toString());
     }
 
-    if(!isAllDigitsIsDifferent(currentNumber)){
+    Character[] currentNum = new Character[4];
+    Character[] serverNum = new Character[4];
+
+    for (int i = 0; i < 4; i++) {
+      currentNum[i] = currentNumber.getNumber().charAt(i);
+      serverNum[i] = this.userService.getCurrentUser().getCurrentGame().getServerNumber().charAt(i);
+    }
+
+    if(!isAllDigitsIsDifferent(currentNum)){
       throw new ValidationException("The digits must be different!!!");
     }
 
-    if(!isAllSymbolsIsDigit(currentNumber)){
+    if(!isAllSymbolsIsDigit(currentNum)){
       throw new ValidationException("Must all symbols is digit!!!");
     }
 
     int cows = 0;
     int bulls = 0;
     for (int i = 0; i < 4; i++) {
-      if (currentNumber.getNumber().substring(i, i + 1).equals(
-        this.userService.getCurrentUser().getCurrentGame().getServerNumber().substring(i, i + 1))) {
+      if (currentNum[i] == serverNum[i]) {
         bulls++;
       }
       for (int j = 0; j < 4; j++) {
-        if (currentNumber.getNumber().substring(j, j + 1).equals(
-          this.userService.getCurrentUser().getCurrentGame().getServerNumber()
-            .substring(i, i + 1)) && i != j) {
+        if (currentNum[j] == serverNum[i] && i != j) {
           cows++;
         }
       }
@@ -128,7 +131,7 @@ public class GameServiceImpl implements GameService {
     return game.getGameHistory();
   }
 
-  private boolean isAllDigitsIsDifferent(NumberResource currentNumber) {
+  private boolean isAllDigitsIsDifferent(Character[] currentNumber) {
     boolean allDigitsIsDifferent = true;
 
     for (int i = 0; i < 4; i++) {
@@ -136,8 +139,7 @@ public class GameServiceImpl implements GameService {
         if(i == j){
           continue;
         }
-        if(currentNumber.getNumber().substring(i, i + 1).equals(
-          currentNumber.getNumber().substring(j, j + 1))){
+        if(currentNumber[i] == currentNumber[j]){
           allDigitsIsDifferent = false;
         }
       }
@@ -145,10 +147,10 @@ public class GameServiceImpl implements GameService {
     return allDigitsIsDifferent;
   }
 
-  private boolean isAllSymbolsIsDigit(NumberResource currentNumber) {
+  private boolean isAllSymbolsIsDigit(Character[] currentNumber) {
     boolean isAllSymbolsIsDigit = true;
       for (int j = 0; j < 4; j++) {
-        if(!isNumeric(currentNumber.getNumber().substring(j, j + 1))){
+        if(!Character.isDigit(currentNumber[j])){
           isAllSymbolsIsDigit = false;
         }
 
