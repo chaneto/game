@@ -1,5 +1,7 @@
 package com.example.game.services.impl;
 
+import static liquibase.util.StringUtil.isNumeric;
+
 import java.time.LocalDateTime;
 import java.util.*;
 import com.example.game.exceptions.UnauthorizedException;
@@ -88,21 +90,12 @@ public class GameServiceImpl implements GameService {
         this.userService.getAllBindingsErrors(bindingResult).toString());
     }
 
-    boolean allDigitsIsDifferent = true;
-
-    for (int i = 0; i < 4; i++) {
-      for (int j = 0; j < 4; j++) {
-        if(i == j){
-          continue;
-        }
-        if(currentNumber.getNumber().substring(i, i + 1).equals(currentNumber.getNumber().substring(j, j + 1))){
-          allDigitsIsDifferent = false;
-        }
-      }
+    if(!isAllDigitsIsDifferent(currentNumber)){
+      throw new ValidationException("The digits must be different!!!");
     }
 
-    if(!allDigitsIsDifferent){
-      throw new ValidationException("The digits must be different!!!");
+    if(!isAllSymbolsIsDigit(currentNumber)){
+      throw new ValidationException("Must all symbols is digit!!!");
     }
 
     int cows = 0;
@@ -133,6 +126,34 @@ public class GameServiceImpl implements GameService {
     game.setNumberOfAttempts(Long.valueOf(game.getGameHistory().size()));
     this.gameRepository.save(game);
     return game.getGameHistory();
+  }
+
+  private boolean isAllDigitsIsDifferent(NumberResource currentNumber) {
+    boolean allDigitsIsDifferent = true;
+
+    for (int i = 0; i < 4; i++) {
+      for (int j = 0; j < 4; j++) {
+        if(i == j){
+          continue;
+        }
+        if(currentNumber.getNumber().substring(i, i + 1).equals(
+          currentNumber.getNumber().substring(j, j + 1))){
+          allDigitsIsDifferent = false;
+        }
+      }
+    }
+    return allDigitsIsDifferent;
+  }
+
+  private boolean isAllSymbolsIsDigit(NumberResource currentNumber) {
+    boolean isAllSymbolsIsDigit = true;
+      for (int j = 0; j < 4; j++) {
+        if(!isNumeric(currentNumber.getNumber().substring(j, j + 1))){
+          isAllSymbolsIsDigit = false;
+        }
+
+    }
+    return isAllSymbolsIsDigit;
   }
 
 

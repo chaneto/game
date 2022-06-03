@@ -10,7 +10,6 @@ const gameTemplate = (game) => html`
 <div id="cowsAndBulls" class=" mt-3 ">
 </div>
 <div class="form-group">
-<label for="username">please enter your 4 digit number</label>
 <input id="yourNumber" type="text" class="form-control" placeholder="enter your number" name="your number" >
 <button id="compareBtn" type="submit" class="btn btn-primary">Compare</button>
 </div>

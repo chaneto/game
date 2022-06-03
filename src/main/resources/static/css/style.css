@@ -81,5 +81,25 @@
   margin: 0 0 0 15px;
 }
 
+#yourNumber{
+position: absolute;
+width: 175px;
+left: 518px;
+}
+
+#compareBtn{
+position: absolute;
+left: 695px;
+}
+
+#cows-and-bulls{
+position: relative;
+ left: 430px;
+}
+
+#footer{
+position: relative;
+top: 33px;
+}
 
 
