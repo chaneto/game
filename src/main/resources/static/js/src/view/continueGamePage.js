@@ -9,7 +9,6 @@ let pagination = document.getElementById("pagination");
 
 const gameTemplate = (game) => html`
 <h1 class="text-center">${game.startDate}</h1>
-<h3 class="text-center">? ? ? ?</h3>
 <div id="cows-and-bulls" class=" mt-3 "></div>
 <div class="form-group">
 <input id="yourNumber" type="text" class="form-control" placeholder="enter your four digits" name="your number" >
