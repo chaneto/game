@@ -7,37 +7,21 @@ let pagination = document.getElementById("pagination");
 
 const gameTemplate = (game) => html`
 <h1 class="text-center">${game.startDate}</h1>
-<div id="cowsAndBulls" class=" mt-3 ">
-</div>
-<div class="form-group">
-<input id="yourNumber" type="text" class="form-control" placeholder="enter your number" name="your number" >
+<div id="cows-and-bulls" ></div>
+<div>
+<input id="yourNumber" type="text" class="form-control" placeholder="enter your four digits" name="your number" >
 <button id="compareBtn" type="submit" class="btn btn-primary">Compare</button>
 </div>
 `;
 
 const cowsAndBullsTemplate = (cowsAndBulls) => html`
-<div  class=" mt-3 ">
-${cowsAndBulls.length == 0 ? null : html` <div class="row d-flex d-wrap">
-${cowsAndBulls.map(p => cowsAndBullsCard(p))}
-</div>`}
-</div>
+${cowsAndBulls.length == 0 ? null : html`
+${cowsAndBulls.map(p => cowsAndBullsCard(p))}`}
 `;
 
 
 const cowsAndBullsCard = (cowsAndBulls) => html`
-                <div class="card-deck d-flex justify-content-center">
-                    <div class="card mb-4" >
-                        <div class="card-body">
-                            <h4 class="card-title">${cowsAndBulls.number}</h4>
-                        </div>
-                        <div class="card">
-                            <p>Cows: ${cowsAndBulls.cows}</p>
-                        </div>
-                        <div class="card">
-                            <p>Bulls: ${cowsAndBulls.bulls}</p>
-                        </div>
-                    </div>
-                </div>
+     <p>${cowsAndBulls.number} ------Bulls: ${cowsAndBulls.bulls} ----- Cows: ${cowsAndBulls.cows}</p>
 `;
 
 export async function gamePage(e) {
@@ -56,7 +40,7 @@ export async function gamePage(e) {
         }
         const resdata = await res.json();
         render(gameTemplate(resdata), main);
-        const cowsAndBullsPage = document.querySelector("#cowsAndBulls");
+        const cowsAndBullsPage = document.querySelector("#cows-and-bulls");
         render(cowsAndBullsTemplate([]), cowsAndBullsPage);
 
         const compareBtn = document.querySelector("#compareBtn");

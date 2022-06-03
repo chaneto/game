@@ -83,13 +83,13 @@
 
 #yourNumber{
 position: absolute;
+left: 513px;
 width: 175px;
-left: 518px;
 }
 
 #compareBtn{
 position: absolute;
-left: 695px;
+left: 690px;
 }
 
 #cows-and-bulls{

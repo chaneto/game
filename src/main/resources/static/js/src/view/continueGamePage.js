@@ -9,19 +9,16 @@ let pagination = document.getElementById("pagination");
 
 const gameTemplate = (game) => html`
 <h1 class="text-center">${game.startDate}</h1>
-<div id="cows-and-bulls" class=" mt-3 "></div>
-<div class="form-group">
+<div id="cows-and-bulls" ></div>
+<div>
 <input id="yourNumber" type="text" class="form-control" placeholder="enter your four digits" name="your number" >
 <button id="compareBtn" type="submit" class="btn btn-primary">Compare</button>
 </div>
 `;
 
 const cowsAndBullsTemplate = (cowsAndBulls) => html`
-<div class=" mt-3 ">
-${cowsAndBulls.length == 0 ? null : html` <div class="card-body">
-${cowsAndBulls.map(p => cowsAndBullsCard(p))}
-</div>`}
-</div>
+${cowsAndBulls.length == 0 ? null : html`
+${cowsAndBulls.map(p => cowsAndBullsCard(p))}`}
 `;
 
 
