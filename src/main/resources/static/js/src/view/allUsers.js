@@ -1,6 +1,7 @@
 import { html, render } from "../../node_modules/lit-html/lit-html.js";
 const main = document.getElementById("home-page");
 const url = "http://localhost:8000/users/all";
+let pagination = document.getElementById("pagination");
 
 const dashboardTemplate = (users) => html`
 <h1 class="text-center">Users ranking</h1>
@@ -32,10 +33,11 @@ const userCard = (user) => html`
 `;
 
 export async function dashboardPage() {
+    pagination.style.display = "none";
            
     try {
         const res = await fetch(url);
-        if(res.status != 200){
+        if(!res.ok){
             throw new Error("Invalid request!!!");
         }
         const users = await res.json();

@@ -1,9 +1,9 @@
 import { updateUserNav } from "../app.js";
 import { loginPage } from "./login.js";
-import { errorPage } from "./errorPage.js";
 import { html, render } from "../../node_modules/lit-html/lit-html.js";
 const main = document.getElementById("home-page");
 const url = "http://localhost:8000/users/register";
+let pagination = document.getElementById("pagination");
 
 const registerTemplate = () => html`
   <form class="text-center border border-light p-5" method="POST">
@@ -26,6 +26,7 @@ const registerTemplate = () => html`
 
 
 export async function registerPage() {
+    pagination.style.display = "none";
     render(registerTemplate(), main);
     let username = document.getElementById("username");
     let password = document.getElementById("password");
@@ -50,8 +51,8 @@ export async function registerPage() {
 
                    const res = await fetch(url, option);
                    const resData = await res.json();
-                  if(res.status != 201){
-                      return errorPage(resData);
+                  if(!res.ok){
+                      throw new Error(resData.description);
                     }
                    updateUserNav();
                    return loginPage();

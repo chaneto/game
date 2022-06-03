@@ -1,6 +1,7 @@
 import { html, render } from "../../node_modules/lit-html/lit-html.js";
 const main = document.getElementById("home-page");
 const url = "http://localhost:8000/games/history/";
+let pagination = document.getElementById("pagination");
 
 const gameTemplate = (cowsAndBulls) => html`
 <div class="form-group">
@@ -30,13 +31,14 @@ const cowsAndBullsCard = (cowsAndBulls) => html`
 `;
 
 export async function gamePageHistory(gameId) {
+    pagination.style.display = "none";
            
     try {
         const res = await fetch(url + gameId);
-        const resdata = await res.json();
-        if(res.status != 200){
-            return errorPage(resdata);
+        if(!res.ok){
+            throw new Error("Invalid request");
         }
+        const resdata = await res.json();
         render(gameTemplate(resdata), main);
 
     } catch (error) {

@@ -49,4 +49,14 @@ public class ControllerAdvisor {
       ex.getMessage());
     return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
   }
+
+  @ExceptionHandler(UnauthorizedException.class)
+  public ResponseEntity<ErrorMessage> unauthorizedException(UnauthorizedException ex) {
+    ErrorMessage message = new ErrorMessage(
+      HttpStatus.UNAUTHORIZED.toString(),
+      LocalDate.now(),
+      "Authorized exception!!!",
+      ex.getMessage());
+    return new ResponseEntity<>(message, HttpStatus.UNAUTHORIZED);
+  }
 }

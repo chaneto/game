@@ -3,10 +3,12 @@ import { allUsersGamePage } from "./allUserGames.js";
 import { html, render } from "../../node_modules/lit-html/lit-html.js";
 const main = document.getElementById("home-page");
 const url = "http://localhost:8000/users/login";
+let pagination = document.getElementById("pagination");
 
-const loginTemplate = () => html`
+const loginTemplate = (status, resData) => html`
   <form class="text-center border border-light p-5" method="POST">
             <h1>LOGIN</h1>
+            ${status != "ok" ? html`<small id="quantityError" class="form-text bg-danger rounded">${resData}</small>` : null} 
             <div class="form-group">
                 <label for="username">Username</label>
                 <input id="username" type="text" class="form-control" placeholder="Username" name="username" >
@@ -20,7 +22,9 @@ const loginTemplate = () => html`
 `;
 
 export async function loginPage() {
-    render(loginTemplate(), main);
+    pagination.style.display = "none";
+    let status = "ok";
+    render(loginTemplate(status), main);
     let username = document.getElementById("username");
     let password = document.getElementById("password");
     let loginBtn = document.getElementById("loginBtn");
@@ -41,10 +45,13 @@ export async function loginPage() {
      try {
 
                     const res = await fetch(url, option);
-                   if(res.status != 200){
-                       throw new Error("invalid request please try again");
+                    const resData = await res.json();
+                   if(!res.ok){
+                       status = "bad requaest";
+                      return render(loginTemplate(status, resData.description), main);
+                       throw new Error(resData.description);
                      }
-                     const resData = await res.json();
+                     
                      const userdata = {
                         username: resData.username,
                         id: resData._id,

@@ -2,6 +2,7 @@ package com.example.game.services.impl;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import com.example.game.exceptions.UnauthorizedException;
 import com.example.game.exceptions.ValidationException;
 import com.example.game.model.entities.CowsAndBulls;
 import com.example.game.model.entities.Game;
@@ -10,6 +11,10 @@ import com.example.game.repositories.GameRepository;
 import com.example.game.services.GameService;
 import com.example.game.services.UserService;
 import com.example.game.web.resources.NumberResource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
@@ -27,25 +32,28 @@ public class GameServiceImpl implements GameService {
     this.cowsAndBullsRepository = cowsAndBullsRepository;
   }
 
-  public List<CowsAndBulls> getGameHistory(Long id){
-     Game game = this.gameRepository.findById(id).orElse(null);
-     return game.getGameHistory();
+  public List<CowsAndBulls> getGameHistory(Long id) {
+    Game game = this.gameRepository.findById(id).orElse(null);
+    return game.getGameHistory();
   }
 
-  public Game createGame(){
+  public Game createGame() {
     Game game = new Game();
     game.setNumberOfAttempts(0L);
     game.setCompleted(false);
     game.setStartDate(LocalDateTime.now());
-    game.setUser(this.userService.getUserByUsername(this.userService.getCurrentUser().getUsername()));
+    game.setUser(
+      this.userService.getUserByUsername(this.userService.getCurrentUser().getUsername()));
     game.setServerNumber(getFourDigitsNumber());
     Game saveGame = this.gameRepository.save(game);
     this.userService.setCurrentGame(saveGame, this.userService.getCurrentUser().getId());
     return saveGame;
   }
 
-  public Game finishGame(){
-    Game game = this.gameRepository.findById(this.userService.getCurrentUser().getCurrentGame().getId()).orElse(null);
+  public Game finishGame() {
+    Game game =
+      this.gameRepository.findById(this.userService.getCurrentUser().getCurrentGame().getId())
+        .orElse(null);
     game.setCompleted(true);
     game.setEndDate(LocalDateTime.now());
     game.setNumberOfAttempts(Long.valueOf(game.getGameHistory().size()));
@@ -53,38 +61,72 @@ public class GameServiceImpl implements GameService {
     return this.gameRepository.save(game);
   }
 
-  public Game continueGame(Long id){
-   Game game = this.gameRepository.findById(id).orElse(null);
+  public Game continueGame(Long id) {
+    Game game = this.gameRepository.findById(id).orElse(null);
+    if (!game.getUser().getId().equals(this.userService.getCurrentUser().getId())) {
+      throw new UnauthorizedException("You are not the owner of the game!!!");
+    }
     this.userService.setCurrentGame(game, this.userService.getCurrentUser().getId());
-   return game;
+    return game;
   }
 
   @Override
-  public List<Game> findAllByUserId() {
-    return this.gameRepository.findAllByUserIdOrderByIdDesc(this.userService.getCurrentUser().getId());
+  public List<Game> findAllByUserId(Integer pageNo, Integer pageSize) {
+    Sort sort = Sort.by("id").descending();
+    Pageable paging = PageRequest.of(pageNo, pageSize, sort);
+    Page<Game> pagedResult = this.gameRepository.findAllByUserId(this.userService.getCurrentUser().getId(), paging);
+    if(pagedResult.hasContent()) {
+      return pagedResult.getContent();
+    } else {
+      return new ArrayList<>();
+    }
   }
 
-  public List<CowsAndBulls> compare(NumberResource currentNumber, BindingResult bindingResult){
-    if(bindingResult.hasErrors()){
-      throw new ValidationException(this.userService.getAllBindingsErrors(bindingResult).toString());
+  public List<CowsAndBulls> compare(NumberResource currentNumber, BindingResult bindingResult) {
+    if (bindingResult.hasErrors()) {
+      throw new ValidationException(
+        this.userService.getAllBindingsErrors(bindingResult).toString());
     }
-     int cows = 0;
-     int bulls = 0;
+
+    boolean allDigitsIsDifferent = true;
+
     for (int i = 0; i < 4; i++) {
-      if(currentNumber.getNumber().substring(i, i + 1).equals(this.userService.getCurrentUser().getCurrentGame().getServerNumber().substring(i, i + 1))){
-          bulls++;
+      for (int j = 0; j < 4; j++) {
+        if(i == j){
+          continue;
+        }
+        if(currentNumber.getNumber().substring(i, i + 1).equals(currentNumber.getNumber().substring(j, j + 1))){
+          allDigitsIsDifferent = false;
+        }
+      }
+    }
+
+    if(!allDigitsIsDifferent){
+      throw new ValidationException("The digits must be different!!!");
+    }
+
+    int cows = 0;
+    int bulls = 0;
+    for (int i = 0; i < 4; i++) {
+      if (currentNumber.getNumber().substring(i, i + 1).equals(
+        this.userService.getCurrentUser().getCurrentGame().getServerNumber().substring(i, i + 1))) {
+        bulls++;
       }
       for (int j = 0; j < 4; j++) {
-        if(currentNumber.getNumber().substring(j, j + 1).equals(this.userService.getCurrentUser().getCurrentGame().getServerNumber().substring(i, i + 1)) && i != j){
+        if (currentNumber.getNumber().substring(j, j + 1).equals(
+          this.userService.getCurrentUser().getCurrentGame().getServerNumber()
+            .substring(i, i + 1)) && i != j) {
           cows++;
         }
       }
 
     }
-    CowsAndBulls cowsAndBulls = new CowsAndBulls(currentNumber.getNumber(), cows, bulls,this.gameRepository.findById(this.userService.getCurrentUser().getCurrentGame().getId()).orElse(null));
+    CowsAndBulls cowsAndBulls = new CowsAndBulls(currentNumber.getNumber(), cows, bulls,
+      this.gameRepository.findById(this.userService.getCurrentUser().getCurrentGame().getId())
+        .orElse(null));
     this.cowsAndBullsRepository.save(cowsAndBulls);
     Long id = this.userService.getCurrentUser().getCurrentGame().getId();
-    if(bulls == 4){
+    if (bulls == 4) {
       finishGame();
     }
     Game game = this.gameRepository.findById(id).orElse(null);
@@ -94,14 +136,14 @@ public class GameServiceImpl implements GameService {
   }
 
 
-  public String getFourDigitsNumber(){
+  public String getFourDigitsNumber() {
     String result = "";
     List<Integer> numbers = new ArrayList<>();
     for (int i = 0; i < 10; i++) {
       numbers.add(i);
     }
     Collections.shuffle(numbers);
-    for(int i = 0; i < 4; i++){
+    for (int i = 0; i < 4; i++) {
       result += numbers.get(i);
     }
     return result;

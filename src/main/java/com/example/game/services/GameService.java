@@ -17,5 +17,5 @@ public interface GameService {
 
   Game continueGame(Long id);
 
-  List<Game> findAllByUserId();
+  List<Game> findAllByUserId(Integer pageNo, Integer pageSize);
 }

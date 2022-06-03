@@ -6,12 +6,15 @@ import com.example.game.model.entities.CowsAndBulls;
 import com.example.game.model.entities.Game;
 import com.example.game.services.GameService;
 import com.example.game.web.assembler.GameAssembler;
+import com.example.game.web.resources.CowsAndBullsResource;
 import com.example.game.web.resources.GameResource;
 import com.example.game.web.resources.NumberResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/games")
@@ -26,31 +29,36 @@ public class GameController {
     this.gameAssembler = gameAssembler;
   }
 
+  @ApiOperation(httpMethod = "GET", value = "Game history.", response = CowsAndBullsResource.class)
   @GetMapping("/history/{id}")
   public ResponseEntity<?> getGameHistory(@PathVariable Long id){
     List<CowsAndBulls> cowsAndBulls = this.gameService.getGameHistory(id);
     return new ResponseEntity<>(this.gameAssembler.assembleCowsAndBullsResource(cowsAndBulls), HttpStatus.OK);
   }
 
+  @ApiOperation(httpMethod = "POST", value = "Create new Game.", response = GameResource.class)
   @PostMapping("/create")
   public ResponseEntity<?> createGame(){
     return new ResponseEntity<>(this.gameAssembler.assembleGameResource(this.gameService.createGame()), HttpStatus.CREATED);
   }
 
+  @ApiOperation(httpMethod = "POST", value = "Compare the numbers, how many cows and bulls.", response = GameResource.class)
   @PostMapping("/compare")
   public ResponseEntity<?> compare(@RequestBody @Valid NumberResource numberResource, BindingResult bindingResult){
     List<CowsAndBulls> cowsAndBulls = this.gameService.compare(numberResource, bindingResult);
     return new ResponseEntity<>(this.gameAssembler.assembleCowsAndBullsResource(cowsAndBulls), HttpStatus.OK);
   }
 
+  @ApiOperation(httpMethod = "GET", value = "Get all User games.", response = GameResource.class)
   @GetMapping
-  public List<GameResource> getAllUserGame(){
-    List<Game> games = this.gameService.findAllByUserId();
-    return this.gameAssembler.assembleGamesResource(games);
+  public ResponseEntity<?> getAllUserGame(@RequestParam("page") Integer page, @RequestParam("pageSize") Integer pageSize){
+    List<Game> games = this.gameService.findAllByUserId(page, pageSize);
+    return new ResponseEntity<>(this.gameAssembler.assembleGamesResource(games), HttpStatus.OK);
   }
 
+  @ApiOperation(httpMethod = "GET", value = "Continue unfinished game", response = GameResource.class)
   @GetMapping("/continue/{id}")
   public ResponseEntity<?> gameContinue(@PathVariable  Long id){
-    return new ResponseEntity<>(this.gameAssembler.assembleGameResource(this.gameService.continueGame(id)), HttpStatus.CREATED);
+    return new ResponseEntity<>(this.gameAssembler.assembleGameResource(this.gameService.continueGame(id)), HttpStatus.OK);
   }
 }
