@@ -5,13 +5,15 @@ const url = "http://localhost:8000/games/create";
 const urlCompare = "http://localhost:8000/games/compare";
 let pagination = document.getElementById("pagination");
 
-const gameTemplate = (game) => html`
+const gameTemplate = (game, finish, duration) => html`
 <h1 class="text-center">${game.startDate}</h1>
+${finish ? html`<h3 class="text-center">${game.serverNumber}</h3>` : html`<h3 class="text-center">? ? ? ?</h3>` }
 <div id="cows-and-bulls" ></div>
+${!finish ? html`
 <div>
 <input id="yourNumber" type="text" class="form-control" placeholder="enter your four digits" name="your number" >
 <button id="compareBtn" type="submit" class="btn btn-primary">Compare</button>
-</div>
+</div>` : html`<h3 class="text-center">congratulations</h3>`}
 `;
 
 const cowsAndBullsTemplate = (cowsAndBulls) => html`
@@ -19,14 +21,15 @@ ${cowsAndBulls.length == 0 ? null : html`
 ${cowsAndBulls.map(p => cowsAndBullsCard(p))}`}
 `;
 
-
 const cowsAndBullsCard = (cowsAndBulls) => html`
      <p>${cowsAndBulls.number} ------Bulls: ${cowsAndBulls.bulls} ----- Cows: ${cowsAndBulls.cows}</p>
 `;
 
-export async function gamePage(e) {
-         e.preventDefault();
+
+export async function gamePage() {
          pagination.style.display = "none";
+         let finish = false;
+
     const option = {
         method: "post",
         headers: {"Content-Type": "application/json"},
@@ -34,15 +37,13 @@ export async function gamePage(e) {
                  }
            
     try {
-        const res = await fetch(url, option);
+        let res = await fetch(url, option);
         if(!res.ok){
             throw new Error("Invalid Request!!!");
         }
-        const resdata = await res.json();
-        render(gameTemplate(resdata), main);
+        let resdata = await res.json();
+        render(gameTemplate(resdata, finish), main);
         const cowsAndBullsPage = document.querySelector("#cows-and-bulls");
-        render(cowsAndBullsTemplate([]), cowsAndBullsPage);
-
         const compareBtn = document.querySelector("#compareBtn");
         const yourNumber = document.querySelector("#yourNumber");
         compareBtn.addEventListener("click", compare);
@@ -65,7 +66,13 @@ export async function gamePage(e) {
                                 throw new Error(cowsAndBulls.description);
                             }
                             if(cowsAndBulls[arrayLength - 1].bulls == 4){
-                                return allUsersGamePage();
+                                res = await fetch(url + gameId);
+                                resdata = await res.json();
+                                finish = true;
+                                let duration = resdata.endDate - resdata.startDate;
+                                render(cowsAndBullsTemplate(cowsAndBulls), cowsAndBullsPage);
+                                render(gameTemplate(resdata, finish, duration), main);
+                                
                             }else{
                             render(cowsAndBullsTemplate(cowsAndBulls), cowsAndBullsPage);
                         }
