@@ -7,7 +7,7 @@ let pagination = document.getElementById("pagination");
 
 
 const gameTemplate = (game, finish, duration) => html`
-<h1 class="text-center">${game.startDate}</h1>
+${finish ? html`<h1 class="text-center">${duration}</h1>` : html`<h1 class="text-center">${game.startDate}</h1>`}
 ${finish ? html`<h3 class="text-center">${game.serverNumber}</h3>` : html`<h3 class="text-center">? ? ? ?</h3>` }
 <div id="cows-and-bulls" ></div>
 ${!finish ? html`
@@ -78,7 +78,8 @@ export async function gamePage(gameId) {
                                  res = await fetch(url + gameId);
                                  resdata = await res.json();
                                  finish = true;
-                                 let duration = resdata.endDate - resdata.startDate;
+                                 let second = Math.abs((new Date(resdata.endDate) - new Date(resdata.startDate)) / 1000);
+                                 let duration = secondsToDhms(second);
                                 render(cowsAndBullsTemplate(cowsAndBulls), cowsAndBullsPage);
                                 render(gameTemplate(resdata, finish, duration), main);
                             }else{
@@ -95,3 +96,17 @@ export async function gamePage(gameId) {
         alert(error.message);
     }
 };
+
+function secondsToDhms(seconds) {
+    seconds = Number(seconds);
+    var d = Math.floor(seconds / (3600*24));
+    var h = Math.floor(seconds % (3600*24) / 3600);
+    var m = Math.floor(seconds % 3600 / 60);
+    var s = Math.floor(seconds % 60);
+    
+    var dDisplay = d > 0 ? d + (d == 1 ? " day, " : " days, ") : "";
+    var hDisplay = h > 0 ? h + (h == 1 ? " hour, " : " hours, ") : "";
+    var mDisplay = m > 0 ? m + (m == 1 ? " minute, " : " minutes, ") : "";
+    var sDisplay = s > 0 ? s + (s == 1 ? " second" : " seconds") : "";
+    return dDisplay + hDisplay + mDisplay + sDisplay;
+    }
