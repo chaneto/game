@@ -1,5 +1,7 @@
 package com.example.game.security;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 import com.example.game.services.impl.GameUserDetailService;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -38,7 +40,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
       .formLogin()
       .usernameParameter("username")
       .passwordParameter("password")
-      .defaultSuccessUrl("/")
+      .defaultSuccessUrl("/all")
       .and()
       .logout()
       .logoutUrl("/logout")

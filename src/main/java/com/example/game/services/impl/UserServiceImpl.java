@@ -41,14 +41,13 @@ public class UserServiceImpl implements UserService {
     User user = new User();
     if (bindingResult.hasErrors()) {
       throw new ValidationException(getAllBindingsErrors(bindingResult).toString());
-    }else if(!userCreateResource.getPassword().equals(userCreateResource.getConfirmPassword())) {
+    } else if (!userCreateResource.getPassword().equals(userCreateResource.getConfirmPassword())) {
       throw new ValidationException("Password dont match!!!");
-    }else if (this.userRepository.findByUsername(userCreateResource.getUsername()) != null) {
+    } else if (this.userRepository.findByUsername(userCreateResource.getUsername()) != null) {
       throw new UsernameException("This username is already exists!!!");
     } else {
       user.setUsername(userCreateResource.getUsername());
-      user.setPassword(userCreateResource.getPassword());
-      //user.setPassword(this.passwordEncoder.encode(userCreateResource.getPassword()));
+      user.setPassword(this.passwordEncoder.encode(userCreateResource.getPassword()));
       return this.userRepository.save(user);
     }
   }
@@ -61,21 +60,17 @@ public class UserServiceImpl implements UserService {
     } else if (user == null) {
       throw new NotFoundException(
         "User with username: " + userCreateResource.getUsername() + " was not found!!!");
-    } else if (user != null) {
-      if (!user.getPassword().equals(userCreateResource.getPassword())) {
-        throw new LoginException("Wrong user or password!!!");
-      }
     }
     authenticate(userCreateResource);
     return user;
   }
 
-  public User getCurrentUser(){
+  public User getCurrentUser() {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    if(authentication.getName().equals("anonymousUser")){
+    if (authentication.getName().equals("anonymousUser")) {
       throw new LoginException("There is no logged user");
     }
-    UserDetails userDetails = (UserDetails)authentication.getPrincipal();
+    UserDetails userDetails = (UserDetails) authentication.getPrincipal();
     return this.userRepository.findByUsername(userDetails.getUsername());
   }
 
@@ -100,16 +95,16 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public List<UserBestGameResource> getAllUserWithBestGame(){
+  public List<UserBestGameResource> getAllUserWithBestGame() {
     List<UserBestGameResource> userBestGameResources = new ArrayList<>();
-    List<String[]> users= this.userRepository.getAllUsersByGames();
+    List<String[]> users = this.userRepository.getAllUsersByGames();
     for (int i = 0; i < users.size(); i++) {
       UserBestGameResource userBestGameResource = new UserBestGameResource();
       userBestGameResource.setUsername(users.get(i)[0]);
       userBestGameResource.setNumberOfCompletedGames(users.get(i)[1]);
       userBestGameResource.setBestNumberOfAttempts(users.get(i)[2]);
-      if(users.get(i)[3] != null){
-      userBestGameResource.setBestTime(users.get(i)[3].substring(0, 8));
+      if (users.get(i)[3] != null) {
+        userBestGameResource.setBestTime(users.get(i)[3].substring(0, 8));
       }
       userBestGameResources.add(userBestGameResource);
     }
@@ -118,6 +113,9 @@ public class UserServiceImpl implements UserService {
 
   public void authenticate(UserCreateResource userCreateResource) {
     UserDetails principal = this.gameUserDetailService.loadUserByUsername(userCreateResource.getUsername());
+    if (!this.passwordEncoder.matches(userCreateResource.getPassword(), principal.getPassword())) {
+      throw new LoginException("Wrong password!!!");
+    }
     Authentication authentication = new UsernamePasswordAuthenticationToken(
       principal, userCreateResource.getPassword(), principal.getAuthorities());
     SecurityContextHolder.getContext().setAuthentication(authentication);
