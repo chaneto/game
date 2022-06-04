@@ -5,18 +5,13 @@ import com.example.game.model.entities.User;
 import com.example.game.services.UserService;
 import com.example.game.web.assembler.GameAssembler;
 import com.example.game.web.assembler.UserAssembler;
-import com.example.game.web.resources.CowsAndBullsResource;
 import com.example.game.web.resources.UserBestGameResource;
 import com.example.game.web.resources.UserCreateResource;
 import com.example.game.web.resources.UserResource;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import io.swagger.annotations.ApiOperation;
 
 @RestController

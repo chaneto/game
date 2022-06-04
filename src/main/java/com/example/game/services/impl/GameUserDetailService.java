@@ -1,11 +1,8 @@
 package com.example.game.services.impl;
 
 import java.util.Collections;
-
-import com.example.game.exceptions.NotFoundException;
 import com.example.game.model.entities.User;
 import com.example.game.repositories.UserRepository;
-
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
