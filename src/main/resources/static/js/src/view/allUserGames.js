@@ -1,5 +1,5 @@
 import { html, render } from "../../node_modules/lit-html/lit-html.js";
-import { gamePage } from "./continueGamePage.js";
+import { continueGamePage } from "./continueGamePage.js";
 import { gamePageHistory } from "./gameHistory.js";
 const main = document.getElementById("home-page");
 const url = "http://localhost:8000/games";
@@ -55,7 +55,7 @@ export async function allUsersGamePage() {
 
 async function onContinue(e){
     let gameId = e.target.getAttribute("value");
-    return gamePage(gameId);
+    return continueGamePage(gameId);
  }
 
 async function onHistory(h) {

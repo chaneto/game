@@ -2,7 +2,7 @@ import { dashboardPage } from "./view/allUsers.js";
 import { loginPage } from "./view/login.js";
 import { logout } from "./view/logout.js";
 import { registerPage } from "./view/register.js";
-import { gamePage } from "./view/gamePage.js"
+import { gamePage } from "./view/continueGamePage.js";
 import { allUsersGamePage} from "./view/allUserGames.js"
 
 let newGameBtn = document.querySelector("#newGame");

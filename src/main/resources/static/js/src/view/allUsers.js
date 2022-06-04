@@ -22,6 +22,9 @@ const userCard = (user) => html`
                         <div class="card">
                             <p>Completed Games: ${user.numberOfCompletedGames}</p>
                         </div>
+                        <div class="card-body">
+                        <h3 class="card-title">Best Game</h3>
+                        </div>
                         <div class="card">
                             <p>Number Attempts: ${user.bestNumberOfAttempts}</p>
                         </div>
