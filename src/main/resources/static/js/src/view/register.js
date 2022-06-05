@@ -6,15 +6,15 @@ const url = "http://localhost:8000/users/register";
 let pagination = document.getElementById("pagination");
 
 const registerTemplate = () => html`
-  <form class="text-center border border-light p-5" method="POST">
+  <form id="register-form" class="text-center border border-light p-5" method="POST">
             <h1>REGISTER</h1>
             <div class="form-group">
                 <label for="username">Username</label>
-                <input id="username" type="text" class="form-control" placeholder="Username" name="username" >
+                <input id="username-register" type="text" class="form-control" placeholder="Username" name="username" >
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
-                <input id="password" type="text" class="form-control" placeholder="Password" name="password">
+                <input id="password-register" type="text" class="form-control" placeholder="Password" name="password">
             </div>
             <div class="form-group">
             <label for="passwordConfirm">Password Confirm</label>

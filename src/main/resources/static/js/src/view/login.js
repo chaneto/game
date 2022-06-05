@@ -6,9 +6,9 @@ const url = "http://localhost:8000/users/login";
 let pagination = document.getElementById("pagination");
 
 const loginTemplate = (status, resData) => html`
-  <form class="text-center border border-light p-5" method="POST">
+  <form id="login-form" class="text center border border-light p-5" method="POST">
             <h1>LOGIN</h1>
-            ${status != "ok" ? html`<small id="quantityError" class="form-text bg-danger rounded">${resData}</small>` : null} 
+            ${status != "ok" ? html`<small id="quantityError" class="form-text bg-danger rounded">${resData}</small>` : null}
             <div class="form-group">
                 <label for="username">Username</label>
                 <input id="username" type="text" class="form-control" placeholder="Username" name="username" >

@@ -84,22 +84,29 @@
 #yourNumber{
 border: 3px solid blue;
 width: 175px;
+height: 33px;
 }
 
 #result{
 border: 3px solid green;
-width: 268px;
-right: -420px;
+width: 260px;
+right: -425px;
 position: relative;
 }
 
-#compareBtn{
+#username{
+width: 275px;
+}
+#password{
+width: 275px;
 
 }
-
-#cows-and-bulls{
-
+#login-form{
+right: -367px;
+position: relative;
 }
+
+
 
 #footer{
 position: relative;

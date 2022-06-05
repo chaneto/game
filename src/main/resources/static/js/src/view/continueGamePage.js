@@ -18,8 +18,8 @@ ${finish ? html`<h3 style="color:red;" class="text-center">${game.serverNumber}<
 <div id="cows-and-bulls" ></div>
 ${!finish ? html`
 <div class="text-center">
-<input id="yourNumber" type="text"  placeholder="enter your four digits" name="your number" >
-<button id="compareBtn" type="submit" class="btn btn-primary">Compare</button>
+<input id="yourNumber" type="text"   placeholder="enter your four digits" name="your number" >
+<button id="compareBtn" type="submit" class="btn-primary">Compare</button>
 </div>` : html`<h3 style="color:green;" class="text-center">Congratulations!!!</h3>
 <h3 style="color:green;" class="text-center">Attempts: ${game.numberOfAttempts}</h3>`}
 </div>
@@ -60,7 +60,6 @@ try {
    compareBtn = document.querySelector("#compareBtn");
    yourNumber = document.querySelector("#yourNumber");
    compareBtn.addEventListener("click", compare);
-
 } catch (error) {
    alert(error.message);
 }
@@ -131,6 +130,7 @@ async function compare(event) {
                         render(cowsAndBullsTemplate(cowsAndBulls), cowsAndBullsPage);
                         render(gameTemplate(resdata, finish, duration), main);
                     }else{
+                    window.scrollTo(0, document.body.scrollHeight || document.documentElement.scrollHeight);    
                     render(cowsAndBullsTemplate(cowsAndBulls), cowsAndBullsPage);
                 }
 
