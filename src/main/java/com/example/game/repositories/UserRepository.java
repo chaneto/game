@@ -22,20 +22,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
   @Query("update User as u set u.currentGame = :currentGame where u.id = :id")
   void setCurrentGame(@Param("currentGame") Game currentGame, @Param("id") Long id);
 
-  @Query(value = "select u.username,(select count(game) from games as game\n" +
-    "where game.end_date is not null and game.user_id = u.id) ,(select game.number_of_attempts from games as game\n" +
-    "where game.end_date is not null and game.user_id = u.id\n" +
-    "order by game.number_of_attempts limit 1)," +
-    "(select cast((end_date - start_date) as varchar) from games as game\n" +
-    "where game.end_date is not null and game.user_id = u.id\n" +
-    "order by game.number_of_attempts, (game.end_date - game.start_date) limit 1)" +
+  @Query(value = "select u.username,\n" +
+    "(select count(game) from games as game where game.end_date is not null and game.user_id = u.id) as completed_games ,\n" +
+    "(select game.number_of_attempts from games as game where game.end_date is not null and game.user_id = u.id order by game.number_of_attempts limit 1) as number_of_attempts,\n" +
+    "(select cast((game.end_date - game.start_date) as varchar) from games as game where game.end_date is not null and game.user_id = u.id order by (game.end_date - game.start_date) limit 1) as best_time\n" +
     "from users as u\n" +
-    "order by (select game.number_of_attempts from games as game\n" +
-    "where game.end_date is not null and game.user_id = u.id\n" +
-    "order by game.number_of_attempts limit 1), \n" +
-    "(select (game.end_date - game.start_date) from games as game\n" +
-    "where game.end_date is not null and game.user_id = u.id\n" +
-    "order by game.number_of_attempts, (game.end_date - game.start_date) limit 1);", nativeQuery = true)
+    "order by number_of_attempts, best_time;", nativeQuery = true)
   List<String[]> getAllUsersByGames();
 
 }
