@@ -82,19 +82,23 @@
 }
 
 #yourNumber{
-position: absolute;
-left: 505px;
+border: 3px solid blue;
 width: 175px;
 }
 
+#result{
+border: 3px solid green;
+width: 268px;
+right: -420px;
+position: relative;
+}
+
 #compareBtn{
-position: absolute;
-left: 685px;
+
 }
 
 #cows-and-bulls{
-position: relative;
- left: 430px;
+
 }
 
 #footer{

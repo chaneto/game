@@ -14,23 +14,26 @@ let finish = "";
 
 const gameTemplate = (game, finish, duration) => html`
 ${finish ? html`<h1 class="text-center">${duration}</h1>` : html`<h1 class="text-center">${game.startDate}</h1>`}
-${finish ? html`<h3 class="text-center">${game.serverNumber}</h3>` : html`<h3 class="text-center">? ? ? ?</h3>` }
+${finish ? html`<h3 style="color:red;" class="text-center">${game.serverNumber}</h3>` : html`<h3 style="color:red;" class="text-center">? ? ? ?</h3>` }
 <div id="cows-and-bulls" ></div>
 ${!finish ? html`
-<div>
-<input id="yourNumber" type="text" class="form-control" placeholder="enter your four digits" name="your number" >
+<div class="text-center">
+<input id="yourNumber" type="text"  placeholder="enter your four digits" name="your number" >
 <button id="compareBtn" type="submit" class="btn btn-primary">Compare</button>
-</div>` : html`<h3 class="text-center">Congratulations!!!</h3>
-<h3 class="text-center">Attempts: ${game.numberOfAttempts}</h3>`}
+</div>` : html`<h3 style="color:green;" class="text-center">Congratulations!!!</h3>
+<h3 style="color:green;" class="text-center">Attempts: ${game.numberOfAttempts}</h3>`}
+</div>
 `;
 
 const cowsAndBullsTemplate = (cowsAndBulls) => html`
 ${cowsAndBulls.length == 0 ? null : html`
-${cowsAndBulls.map(p => cowsAndBullsCard(p))}`}
+<div class="text-center">
+${cowsAndBulls.map(p => cowsAndBullsCard(p))}
+</div>`}
 `;
 
 const cowsAndBullsCard = (cowsAndBulls) => html`
-  <p>${cowsAndBulls.number} ------Bulls: ${cowsAndBulls.bulls} ----- Cows: ${cowsAndBulls.cows}</p>
+ <p id="result" style="color:blue;" class="text-center" >${cowsAndBulls.number} --------Bulls: ${cowsAndBulls.bulls} ------- Cows: ${cowsAndBulls.cows}</p>
 `;
 
 
