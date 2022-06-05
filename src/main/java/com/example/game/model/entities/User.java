@@ -5,9 +5,6 @@ import java.util.List;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
 @Entity
 @Table(name = "users")
 public class User {
