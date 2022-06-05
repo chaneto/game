@@ -74,6 +74,10 @@ public class UserServiceImpl implements UserService {
     return this.userRepository.findByUsername(userDetails.getUsername());
   }
 
+  @Override public void deleteById(Long id) {
+    this.userRepository.deleteById(id);
+  }
+
   @Override public void setCurrentGame(Game currentGame, Long id) {
     this.userRepository.setCurrentGame(currentGame, id);
   }

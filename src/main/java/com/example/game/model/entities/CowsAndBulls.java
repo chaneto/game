@@ -5,7 +5,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 
 @Entity
-@Table(name ="game_history")
+@Table(name ="cows_and_bulls")
 public class CowsAndBulls {
 
   @Id

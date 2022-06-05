@@ -15,6 +15,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
   User findByUsername(String username);
 
+  void deleteById(Long id);
+
   @Modifying
   @Transactional
   @Query("update User as u set u.currentGame = :currentGame where u.id = :id")

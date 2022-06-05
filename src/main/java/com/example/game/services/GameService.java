@@ -11,6 +11,12 @@ public interface GameService {
 
   Game createGame();
 
+  Game finishGame();
+
+  boolean isAllDigitsIsDifferent(Character[] currentNumber);
+
+  boolean isAllSymbolsIsDigit(Character[] currentNumber);
+
   List<CowsAndBulls> compare(NumberResource currentNumber, BindingResult bindingResult);
 
   String getFourDigitsNumber();

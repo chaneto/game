@@ -46,6 +46,6 @@ public class UserController {
   @ApiOperation(httpMethod = "GET", value = "All registered users.", response = UserBestGameResource.class)
   @GetMapping("/all")
   public ResponseEntity<?> getAllUserWithBestGame(){
-     return new ResponseEntity<>(this.userService.getAllUserWithBestGame(), HttpStatus.OK);
+    return new ResponseEntity<>(this.userService.getAllUserWithBestGame(), HttpStatus.OK);
   }
 }

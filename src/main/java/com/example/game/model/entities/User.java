@@ -5,6 +5,9 @@ import java.util.List;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 @Entity
 @Table(name = "users")
 public class User {
@@ -21,7 +24,7 @@ public class User {
   @Size(min = 5, message = "Username length must be min 5 characters!!!")
   private String password;
 
-  @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+  @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Game> games = new ArrayList<>();
 
   @OneToOne

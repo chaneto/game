@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
@@ -33,7 +36,7 @@ public class Game {
   @Column(name = "is_completed", nullable = false)
   private boolean isCompleted;
 
-  @OneToMany(mappedBy = "game", fetch = FetchType.EAGER)
+  @OneToMany(mappedBy = "game", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
   private List<CowsAndBulls> gameHistory = new ArrayList<>();
 
   @ManyToOne

@@ -5,6 +5,8 @@ databaseChangeLog:
       logicalFilePath: src/main/resources/db/changelog/v1/changes/changelog-0.0.1.yml
       context: default
       changes:
+        - tagDatabase:
+            tag: version_0.0.1
         - createTable:
             tableName: users
             columns:
@@ -26,6 +28,9 @@ databaseChangeLog:
                   type: VARCHAR(100)
                   constraints:
                     nullable: false
+              - column:
+                  name: current_game_id
+                  type: INT
         - createTable:
             tableName: games
             columns:
@@ -41,7 +46,6 @@ databaseChangeLog:
                   type: VARCHAR(100)
                   constraints:
                     nullable: false
-                    unique: true
               - column:
                   name: start_date
                   type: TIMESTAMP
@@ -60,6 +64,35 @@ databaseChangeLog:
                   type: BOOLEAN
                   constraints:
                     nullable: false
-
-
+              - column:
+                  name: user_id
+                  type: INT
+        - createTable:
+            tableName: cows_and_bulls
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: number
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: cows
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: bulls
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: game_id
+                  type: INT
 

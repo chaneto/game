@@ -131,7 +131,7 @@ public class GameServiceImpl implements GameService {
     return game.getGameHistory();
   }
 
-  private boolean isAllDigitsIsDifferent(Character[] currentNumber) {
+  public boolean isAllDigitsIsDifferent(Character[] currentNumber) {
     boolean allDigitsIsDifferent = true;
 
     for (int i = 0; i < 4; i++) {
@@ -147,7 +147,7 @@ public class GameServiceImpl implements GameService {
     return allDigitsIsDifferent;
   }
 
-  private boolean isAllSymbolsIsDigit(Character[] currentNumber) {
+  public boolean isAllSymbolsIsDigit(Character[] currentNumber) {
     boolean isAllSymbolsIsDigit = true;
       for (int j = 0; j < 4; j++) {
         if(!Character.isDigit(currentNumber[j])){
