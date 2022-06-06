@@ -28,8 +28,8 @@ const registerTemplate = () => html`
 export async function registerPage() {
     pagination.style.display = "none";
     render(registerTemplate(), main);
-    let username = document.getElementById("username");
-    let password = document.getElementById("password");
+    let username = document.getElementById("username-register");
+    let password = document.getElementById("password-register");
     let passwordConfirm = document.getElementById("passwordConfirm");
     let registerBtn = document.getElementById("registerBtn");
     registerBtn.addEventListener("click", onRegister);

@@ -25,7 +25,6 @@ ${!finish ? html`
 </div>
 
 
-
 `;
 
 const cowsAndBullsTemplate = (cowsAndBulls) => html`

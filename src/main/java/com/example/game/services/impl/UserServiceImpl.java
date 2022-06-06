@@ -58,8 +58,7 @@ public class UserServiceImpl implements UserService {
     if (bindingResult.hasErrors()) {
       throw new ValidationException(getAllBindingsErrors(bindingResult).toString());
     } else if (user == null) {
-      throw new NotFoundException(
-        "User with username: " + userCreateResource.getUsername() + " was not found!!!");
+      throw new NotFoundException("Bad credentials");
     }
     authenticate(userCreateResource);
     return user;
@@ -118,7 +117,7 @@ public class UserServiceImpl implements UserService {
   public void authenticate(UserCreateResource userCreateResource) {
     UserDetails principal = this.gameUserDetailService.loadUserByUsername(userCreateResource.getUsername());
     if (!this.passwordEncoder.matches(userCreateResource.getPassword(), principal.getPassword())) {
-      throw new LoginException("Wrong password!!!");
+      throw new LoginException("Bad credentials!!!");
     }
     Authentication authentication = new UsernamePasswordAuthenticationToken(
       principal, userCreateResource.getPassword(), principal.getAuthorities());

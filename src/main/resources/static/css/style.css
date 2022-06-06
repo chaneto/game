@@ -81,6 +81,10 @@
   margin: 0 0 0 15px;
 }
 
+#quantityError{
+width: 275px;
+}
+
 #yourNumber{
 border: 3px solid blue;
 width: 175px;
@@ -123,4 +127,5 @@ position:relative;
 position: relative;
 top: 33px;
 }
+
 
