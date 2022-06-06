@@ -106,7 +106,18 @@ right: -367px;
 position: relative;
 }
 
+.navbar-nav > .active > a {
+   background-color: blue;
+}
 
+.navbar-nav > div > .active > a {
+   background-color: blue;
+}
+
+#dashboard{
+right: 5px;
+position:relative;
+}
 
 #footer{
 position: relative;
