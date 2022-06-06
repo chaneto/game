@@ -10,6 +10,8 @@ let compareBtn = "";
 let yourNumber = "";
 let currentId = "";
 let finish = "";
+let status = "";
+let currentHistory = "";
 
 
 const gameTemplate = (game, finish, duration) => html`
@@ -27,11 +29,11 @@ ${!finish ? html`
 
 `;
 
-const cowsAndBullsTemplate = (cowsAndBulls) => html`
+const cowsAndBullsTemplate = (cowsAndBulls, currentHistory, status) => html`
 ${cowsAndBulls.length == 0 ? null : html`
-<div class="text-center">
-${cowsAndBulls.map(p => cowsAndBullsCard(p))}
+<div class="text-center"> ${currentHistory.map(p => cowsAndBullsCard(p))}
 </div>`}
+${status != "ok" ? html`<small id="quantityError" class="form-text bg-danger rounded">${cowsAndBulls.description}</small>` : null}
 `;
 
 const cowsAndBullsCard = (cowsAndBulls) => html`
@@ -80,16 +82,17 @@ export async function continueGamePage(gameId) {
         }
         const resdata = await res.json();
         render(gameTemplate(resdata, finish), main);
-
+        status = "ok";
         cowsAndBullsPage = document.querySelector("#cows-and-bulls");
 
         try {
             const resGameHistory = await fetch(urlGameHistory + gameId);
             const resdataGameHistory = await resGameHistory.json();
+            currentHistory = resdataGameHistory;
             if(!resGameHistory.ok){
                 throw new Element("Invalid request!!!");
             }
-            render(cowsAndBullsTemplate(resdataGameHistory), cowsAndBullsPage);
+            render(cowsAndBullsTemplate(resdataGameHistory, currentHistory, status), cowsAndBullsPage);
 
         } catch (error) {
             alert(error.message);
@@ -107,6 +110,7 @@ export async function continueGamePage(gameId) {
 
 async function compare(event) {
     event.preventDefault();
+    status = "ok";
     let data = {
         number: yourNumber.value
                 }
@@ -121,19 +125,23 @@ async function compare(event) {
                    const cowsAndBulls = await result.json();
                    let arrayLength = cowsAndBulls.length;
                     if(!result.ok){
-                        throw new Error(cowsAndBulls.description);
+                     status = "bad request";
+                     return render(cowsAndBullsTemplate(cowsAndBulls,currentHistory ,status), cowsAndBullsPage);
+
                     }
                     if(cowsAndBulls[arrayLength - 1].bulls == 4){
                         const res = await fetch(url + currentId);
                         const resdata = await res.json();
                          finish = true;
+                         currentHistory = cowsAndBulls;
                          let second = Math.abs((new Date(resdata.endDate) - new Date(resdata.startDate)) / 1000);
                          let duration = secondsToDhms(second);
-                        render(cowsAndBullsTemplate(cowsAndBulls), cowsAndBullsPage);
+                        render(cowsAndBullsTemplate(cowsAndBulls, currentHistory, status), cowsAndBullsPage);
                         render(gameTemplate(resdata, finish, duration), main);
                     }else{
-                    window.scrollTo(0, document.body.scrollHeight || document.documentElement.scrollHeight);    
-                    render(cowsAndBullsTemplate(cowsAndBulls), cowsAndBullsPage);
+                    window.scrollTo(0, document.body.scrollHeight || document.documentElement.scrollHeight);
+                    currentHistory = cowsAndBulls;
+                    render(cowsAndBullsTemplate(cowsAndBulls, currentHistory, status), cowsAndBullsPage);
                 }
 
                 } catch (error) {

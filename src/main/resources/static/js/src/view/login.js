@@ -15,7 +15,7 @@ const loginTemplate = (status, resData) => html`
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
-                <input id="password" type="text" class="form-control" placeholder="Password" name="password">
+                <input id="password" type="password" class="form-control" placeholder="Password" name="password">
             </div>
             <button id="loginBtn" type="submit" class="btn btn-primary">Login</button>
         </form>

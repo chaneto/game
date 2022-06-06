@@ -81,10 +81,6 @@
   margin: 0 0 0 15px;
 }
 
-#quantityError{
-width: 275px;
-}
-
 #yourNumber{
 border: 3px solid blue;
 width: 175px;
@@ -121,6 +117,12 @@ position: relative;
 #dashboard{
 right: 5px;
 position:relative;
+}
+
+#quantityError{
+width: 265px;
+right: -425px;
+position: relative;
 }
 
 #footer{
