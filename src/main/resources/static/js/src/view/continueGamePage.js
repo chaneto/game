@@ -23,6 +23,9 @@ ${!finish ? html`
 </div>` : html`<h3 style="color:green;" class="text-center">Congratulations!!!</h3>
 <h3 style="color:green;" class="text-center">Attempts: ${game.numberOfAttempts}</h3>`}
 </div>
+
+
+
 `;
 
 const cowsAndBullsTemplate = (cowsAndBulls) => html`
