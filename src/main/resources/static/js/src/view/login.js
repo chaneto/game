@@ -15,7 +15,7 @@ const loginTemplate = (status, resData) => html`
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
-                <input id="password" type="password" class="form-control" placeholder="Password" name="password">
+                <input id="password" type="text" class="form-control" placeholder="Password" name="password">
             </div>
             <button id="loginBtn" type="submit" class="btn btn-primary">Login</button>
         </form>
@@ -47,8 +47,8 @@ export async function loginPage() {
                     const res = await fetch(url, option);
                     const resData = await res.json();
                    if(!res.ok){
-                       status = "bad requaest";
-                      return render(loginTemplate(status, resData.description), main);
+                       status = "bad request";
+                       return render(loginTemplate(status, resData.description), main);
                        throw new Error(resData.description);
                      }
                      
