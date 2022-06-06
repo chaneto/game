@@ -6,21 +6,21 @@ const url = "http://localhost:8000/users/register";
 let pagination = document.getElementById("pagination");
 
 const registerTemplate = (status, resData) => html`
-  <form id="register-form" class="text-center border border-light p-5" method="POST">
+  <form id="register-form" class="border border-light p-5" method="POST">
             <h1>REGISTER</h1>
              ${status != "ok" ? html`<small id="quantityError" class="form-text bg-danger rounded">${resData}</small>` : null}
             <div class="form-group">
-                <label for="username">Username</label>
+                <label for="username-register">Username</label>
                 <input id="username-register" type="text" class="form-control" placeholder="Username" name="username" >
             </div>
             <div class="form-group">
-                <label for="password">Password</label>
+                <label for="password-register">Password</label>
                 <input id="password-register" type="password" class="form-control" placeholder="Password" name="password">
             </div>
             <div class="form-group">
             <label for="passwordConfirm">Password Confirm</label>
             <input id="passwordConfirm" type="password" class="form-control" placeholder="Password Confirm" name="passwordConfirm">
-        </div>
+            </div>
             <button id="registerBtn" type="submit" class="btn btn-primary">Register</button>
         </form>
 `;

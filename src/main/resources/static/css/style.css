@@ -99,9 +99,21 @@ width: 275px;
 }
 #password{
 width: 275px;
-
 }
 #login-form{
+right: -367px;
+position: relative;
+}
+#username-register{
+width: 275px;
+}
+#password-register{
+width: 275px;
+}
+#passwordConfirm{
+width: 275px;
+}
+#register-form{
 right: -367px;
 position: relative;
 }
@@ -121,8 +133,6 @@ position:relative;
 
 #quantityError{
 width: 265px;
-right: -425px;
-position: relative;
 }
 
 #footer{
