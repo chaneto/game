@@ -6,7 +6,12 @@ const url = "http://localhost:8000/users/login";
 let pagination = document.getElementById("pagination");
 
 const loginTemplate = (status, resData) => html`
-  <form id="login-form" class="text center border border-light p-5" method="POST">
+
+        <div id="login-image">
+            <img src="../img/index.png" class="img-fluid" alt="Responsive image" style="width: 330px; height: 200px">
+        </div>
+
+  <form id="login-form" class="border border-light p-5" method="POST">
             <h1>LOGIN</h1>
             ${status != "ok" ? html`<small id="quantityError" class="form-text bg-danger rounded">${resData}</small>` : null}
             <div class="form-group">

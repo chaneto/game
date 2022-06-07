@@ -6,6 +6,9 @@ const url = "http://localhost:8000/users/register";
 let pagination = document.getElementById("pagination");
 
 const registerTemplate = (status, resData) => html`
+   <div id="login-image">
+            <img src="../img/index.png" class="img-fluid" alt="Responsive image" style="width: 330px; height: 250px">
+        </div>
   <form id="register-form" class="border border-light p-5" method="POST">
             <h1>REGISTER</h1>
              ${status != "ok" ? html`<small id="quantityError" class="form-text bg-danger rounded">${resData}</small>` : null}
