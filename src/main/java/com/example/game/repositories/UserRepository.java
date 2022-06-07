@@ -27,7 +27,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     "(select game.number_of_attempts from games as game where game.end_date is not null and game.user_id = u.id order by game.number_of_attempts limit 1) as number_of_attempts,\n" +
     "(select cast((game.end_date - game.start_date) as varchar) from games as game where game.end_date is not null and game.user_id = u.id order by (game.end_date - game.start_date) limit 1) as best_time\n" +
     "from users as u\n" +
-    "order by number_of_attempts, best_time;", nativeQuery = true)
+    "where (select count(game) from games as game where game.end_date is not null and game.user_id = u.id) != 0\n" +
+    "order by \n" +
+    "number_of_attempts, best_time, completed_games;", nativeQuery = true)
   List<String[]> getAllUsersByGames();
 
 }

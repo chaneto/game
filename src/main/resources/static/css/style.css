@@ -40,19 +40,35 @@
     box-shadow: 0 5px 10px #cccccc;
 }
 
-.pagination {
-  display: flex;
-  list-style: none;
-}
-.pagination li {
-   margin: 1px 25px;
-}
-
 #pagination{
-right: -425px;
-position: relative;
+right: 555px;
+position: absolute;
 }
 
+#pageNumber{
+right: 58px;
+top:7px;
+position: absolute;
+}
+
+/* Pagination links */
+.pagination a {
+  color: blue;
+  float: left;
+  padding: 8px 16px;
+  text-decoration: none;
+  transition: background-color;
+  border-radius: 33px;
+}
+
+/* Style the active/current link */
+.pagination a.active {
+  background-color: dodgerblue;
+  color: white;
+}
+
+/* Add a grey background color on mouse-over */
+.pagination a:hover:not(.active) {background-color: #ddd;}
 
 #yourNumber{
 border: 3px solid blue;
