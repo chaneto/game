@@ -56,6 +56,13 @@ public class GameController {
     return new ResponseEntity<>(this.gameAssembler.assembleGamesResource(games), HttpStatus.OK);
   }
 
+  @ApiOperation(httpMethod = "GET", value = "Get all User games size.", response = GameResource.class)
+  @GetMapping("/size")
+  public ResponseEntity<?> getAllUserGameSize(){
+    List<Game> games = this.gameService.findAllByUserIdSize();
+    return new ResponseEntity<>(this.gameAssembler.assembleGamesResource(games), HttpStatus.OK);
+  }
+
   @ApiOperation(httpMethod = "GET", value = "Continue unfinished game", response = GameResource.class)
   @GetMapping("/continue/{id}")
   public ResponseEntity<?> gameContinue(@PathVariable  Long id){

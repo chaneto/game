@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 public interface GameRepository extends JpaRepository<Game, Long> {
 
-   List<Game> findAllByUserIdOrderByIdDesc(Long id);
+   List<Game> findAllByUserId(Long id);
 
    Page<Game> findAllByUserId(Long id, Pageable pageable);
 

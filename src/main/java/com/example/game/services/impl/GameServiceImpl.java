@@ -82,6 +82,11 @@ public class GameServiceImpl implements GameService {
     }
   }
 
+  @Override
+  public List<Game> findAllByUserIdSize(){
+    return this.gameRepository.findAllByUserId(this.userService.getCurrentUser().getId());
+  }
+
   public List<CowsAndBulls> compare(NumberResource currentNumber, BindingResult bindingResult) {
     if (bindingResult.hasErrors()) {
       throw new ValidationException(

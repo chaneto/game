@@ -4,6 +4,7 @@ import { gamePageHistory } from "./gameHistory.js";
 import { gameTemplate } from "../html-templates/allUserGamesTemplate.js";
 const main = document.getElementById("home-page");
 const url = "http://localhost:8000/games";
+const urlAllGAmes = "http://localhost:8000/games/size";
 let pagination = document.getElementById("pagination");
 let pageNumber = document.getElementById("pageNumber");
 let next = document.getElementById("next");
@@ -17,6 +18,19 @@ export async function allUsersGamePage() {
         pagination.style.display = "block";
 
 }
+
+async function getAllGames(){
+   try {
+        const res = await fetch(urlAllGAmes);
+        if(!res.ok){
+            throw new Error("Invalid request!!!");
+        }
+        const games = await res.json();
+        return games.length;
+        }catch(error){
+        alert(error.message);
+        }
+ }
 
 async function onContinue(e){
     let gameId = e.target.getAttribute("value");
@@ -44,10 +58,13 @@ function onPrevious(prev){
 
 
 next.addEventListener("click", onNext);
-function onNext(nex){
+async function onNext(nex){
   nex.preventDefault();
   pegaNumberCurrent = Number(pageNumber.textContent) + 1;
-   if(pegaNumberCurrent > 9){
+  let allGames = await getAllGames();
+  let allPages = Math.ceil(allGames / 4);
+
+   if(pegaNumberCurrent >= allPages){
        next.style.display = "none";
    }else{
        next.style.display = "block";
@@ -71,7 +88,9 @@ function onNext(nex){
          } catch (error) {
             alert(error.message);
         }
-  }       
+  }
+
+
 
 
 

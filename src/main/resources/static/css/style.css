@@ -40,35 +40,43 @@
     box-shadow: 0 5px 10px #cccccc;
 }
 
-#pagination{
-right: 555px;
+#quantityError{
+  position: relative;
+  left: 424px;
+}
+
+#next{
+left: 653px;
+position: absolute;
+}
+
+#previous{
+left: 543px;
 position: absolute;
 }
 
 #pageNumber{
-right: 58px;
-top:7px;
+left: 639px;
 position: absolute;
 }
 
-/* Pagination links */
 .pagination a {
   color: blue;
   float: left;
-  padding: 8px 16px;
+  padding: 1px 15px;
   text-decoration: none;
   transition: background-color;
   border-radius: 33px;
 }
 
-/* Style the active/current link */
 .pagination a.active {
   background-color: dodgerblue;
   color: white;
 }
 
-/* Add a grey background color on mouse-over */
-.pagination a:hover:not(.active) {background-color: #ddd;}
+.pagination a:hover:not(.active) {
+background-color: #ddd;
+}
 
 #yourNumber{
 border: 3px solid blue;

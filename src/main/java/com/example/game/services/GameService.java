@@ -9,6 +9,8 @@ import org.springframework.validation.BindingResult;
 public interface GameService {
   List<CowsAndBulls> getGameHistory(Long id);
 
+  List<Game> findAllByUserIdSize();
+
   Game createGame();
 
   Game finishGame();
