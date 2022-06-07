@@ -2,7 +2,7 @@ import { html } from "../../node_modules/lit-html/lit-html.js";
 
 export const registerTemplate = (status, resData) => html`
    <div id="login-image">
-            <img src="../img/index.png" class="img-fluid" alt="Responsive image" style="width: 330px; height: 250px">
+            <img src="../img/img1.png" class="img-fluid" alt="Responsive image" style="width: 330px; height: 250px">
         </div>
   <form id="register-form" class="border border-light p-5" method="POST">
             <h1>REGISTER</h1>

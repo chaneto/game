@@ -89,17 +89,31 @@ width: 275px;
 #password{
 width: 275px;
 }
+
 #login-image{
 left: 625px;
 top: 200px;
 position: absolute;
 }
+
+#game-image-left{
+  position:absolute;
+  top:230px;
+}
+#game-image-right{
+  position:absolute;
+  left: 860px;
+  top:230px;
+}
+
 #username-register{
 width: 275px;
 }
+
 #password-register{
 width: 275px;
 }
+
 #passwordConfirm{
 width: 275px;
 }
