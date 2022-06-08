@@ -15,8 +15,10 @@ export async function allUsersGamePage() {
 
     pegaNumberCurrent = pageNumber.textContent;
        await viewProducts(pegaNumberCurrent - 1, onContinue, onHistory);
-        pagination.style.display = "block";
-
+       pagination.style.display = "block";
+       if(pegaNumberCurrent <= 1){
+       previous.style.display = "none";
+       }
 }
 
 async function getAllGames(){
@@ -46,7 +48,7 @@ previous.addEventListener("click", onPrevious);
 function onPrevious(prev){
        prev.preventDefault();
        pegaNumberCurrent = Number(pageNumber.textContent) - 1;
-            if(pegaNumberCurrent <= 1){
+            if(pegaNumberCurrent <= 1 ){
                   previous.style.display = "none";
               }else{
                   previous.style.display = "block";
@@ -74,8 +76,7 @@ async function onNext(nex){
        viewProducts(pegaNumberCurrent - 1);
         }
 
-
-        async function viewProducts(page){
+ async function viewProducts(page){
 
     try {
         const res = await fetch(url + "?page=" + page + "&pageSize=4");
