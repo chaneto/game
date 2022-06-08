@@ -13,7 +13,7 @@ export const registerTemplate = (status, resData) => html`
             </div>
             <div class="form-group">
                 <label for="password-register">Password</label>
-                <input id="password-register" type="password" class="form-control" placeholder="Password" name="password">
+                <input id="password-register" type="password" class="form-control" placeholder="Password" name="password"/>
             </div>
             <div class="form-group">
             <label for="passwordConfirm">Password Confirm</label>
