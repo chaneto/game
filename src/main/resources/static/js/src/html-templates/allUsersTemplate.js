@@ -11,21 +11,21 @@ ${users.map(p => userCard(p))}
 
 const userCard = (user) => html`
                 <div class="card-deck d-flex justify-content-center">
-                    <div class="card mb-4" >
+                    <div class="card mb-4 user-card" >
                         <div class="card-body">
-                            <h4 class="card-title">${user.username}</h4>
+                            <h4 style="color:#C20909;" class="card-title">${user.username}</h4>
                         </div>
                         <div class="card">
-                            <p>Completed Games: ${user.numberOfCompletedGames}</p>
+                            <p style="color:#1E10AD; font-weight: bold;">Completed Games: ${user.numberOfCompletedGames}</p>
                         </div>
                         <div class="card-body">
-                        <h3 class="card-title">Best Scores</h3>
+                        <h5 style="color:Tomato;" class="card-title">Best Scores</h5>
                         </div>
                         <div class="card">
-                            <p>Number Attempts: ${user.bestNumberOfAttempts}</p>
+                            <p style="color:#4BAAF5; font-weight: bold">Number Attempts: ${user.bestNumberOfAttempts}</p>
                         </div>
                         <div class="card">
-                            <p>Best Time: ${user.bestTime}</p>
+                            <p style="color:#4BAAF5; font-weight: bold">Best Time: ${user.bestTime}</p>
                         </div>
                     </div>
                 </div>

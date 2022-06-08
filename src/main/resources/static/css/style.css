@@ -40,6 +40,12 @@
     box-shadow: 0 5px 10px #cccccc;
 }
 
+.user-card{
+ outline: 3px inset #F54B4B;
+ position: relative;
+ radius: 35px;
+}
+
 #quantityError{
   position: relative;
   left: 424px;

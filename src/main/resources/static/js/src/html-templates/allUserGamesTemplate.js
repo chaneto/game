@@ -13,24 +13,24 @@ ${games.length != 0 ? html`<div class="row d-flex d-wrap">
 
 const gameCard = (game, onContinue, onHistory) => html`
                 <div class="card-deck d-flex justify-content-center">
-                    <div class="card mb-4" >
+                    <div class="card mb-4 user-card" >
                         <div class="card">
-                            <p>Start Time: ${game.startDate}</p>
+                            <p style="color:#900C3F; font-weight: bold">Start Time: ${game.startDate}</p>
                         </div>
                         <div class="card">
-                            <p>End Time: ${game.endDate}</p>
+                            <p style="color:#C70039; font-weight: bold">End Time: ${game.endDate}</p>
                         </div>
                         <div class="card">
-                            <p>Number Attempts: ${game.numberOfAttempts}</p>
+                            <p style="color:#C20909; font-weight: bold">Number Attempts: ${game.numberOfAttempts}</p>
                         </div>
                         <div class="card">
-                        ${game.completed ? html`<p>Is Completed: yes</p>` : html`<p>Is Completed: no</p>`}
+                        ${game.completed ? html`<p style="color:#FF5733; font-weight: bold">Is Completed: yes</p>` : html`<p style="color:#FF5733; font-weight: bold">Is Completed: no</p>`}
                         </div>
                        <div class="card">
-                       ${!game.completed ? html`<a @click=${onContinue}  class="btn btn-primary" value=${game.id}>Continue</a> ` : null}
+                       ${!game.completed ? html`<a style="color:#0EEA4A; font-weight: bold" @click=${onContinue}  class="btn btn-primary" value=${game.id}>Continue</a> ` : null}
                         </div>
                       <div class="card">
-                        <a @click=${onHistory}  class="btn btn-primary" value=${game.id}>History</a>
+                        <a style="color:#0EEA4A; font-weight: bold" @click=${onHistory}  class="btn btn-primary" value=${game.id}>History</a>
                          </div>
                     </div>
                 </div>
