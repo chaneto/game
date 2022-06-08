@@ -9,15 +9,15 @@ export const registerTemplate = (status, resData) => html`
              ${status != "ok" ? html`<small id="quantityError" class="form-text bg-danger rounded">${resData}</small>` : null}
             <div class="form-group">
                 <label for="username-register">Username</label>
-                <input id="username-register" type="text" class="form-control" placeholder="Username" name="username" >
+                <input id="username-register" type="text" class="form-control" placeholder="Username" name="username"/>
             </div>
             <div class="form-group">
                 <label for="password-register">Password</label>
-                <input id="password-register" type="password" class="form-control" placeholder="Password" name="password">
+                <input id="password-register" type="password" class="form-control" placeholder="Password" name="password"/>
             </div>
             <div class="form-group">
             <label for="passwordConfirm">Password Confirm</label>
-            <input id="passwordConfirm" type="password" class="form-control" placeholder="Password Confirm" name="passwordConfirm">
+            <input id="passwordConfirm" type="password" class="form-control" placeholder="Password Confirm" name="passwordConfirm"/>
             </div>
             <button id="registerBtn" type="submit" class="btn btn-primary">Register</button>
         </form>

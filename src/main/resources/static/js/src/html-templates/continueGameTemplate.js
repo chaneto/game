@@ -9,7 +9,7 @@ ${finish ? html`<h3 style="color:red;" class="text-center">${game.serverNumber}<
 <div id="cows-and-bulls" ></div>
 ${!finish ? html`
 <div class="text-center">
-<input id="yourNumber" type="text"   placeholder="enter your four digits" name="your number" >
+<input id="yourNumber" type="text"   placeholder="enter your four digits" name="your number"/>
 <button id="compareBtn" type="submit" class="btn-primary">Compare</button>
 </div>` : html`<h3 style="color:green;" class="text-center">Congratulations!!!</h3>
 <h3 style="color:green;" class="text-center">Attempts: ${game.numberOfAttempts}</h3>`}
@@ -28,5 +28,5 @@ ${status != "ok" ? html`<small id="quantityError" class="form-text bg-danger rou
 `;
 
 const cowsAndBullsCard = (cowsAndBulls) => html`
- <p id="result" style="color:blue;" class="text-center" >${cowsAndBulls.number} --------Bulls: ${cowsAndBulls.bulls} ------- Cows: ${cowsAndBulls.cows}</p>
+ <p id="result" style="color:blue;" class="text-center">${cowsAndBulls.number} --------Bulls: ${cowsAndBulls.bulls} ------- Cows: ${cowsAndBulls.cows}</p>
 `;

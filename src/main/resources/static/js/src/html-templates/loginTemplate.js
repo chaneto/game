@@ -10,11 +10,11 @@ export const loginTemplate = (status, resData) => html`
 ${status != "ok" ? html`<small id="quantityError" class="form-text bg-danger rounded">${resData}</small>` : null}
 <div class="form-group">
     <label for="username">Username</label>
-    <input id="username" type="text" class="form-control" placeholder="Username" name="username" >
+    <input id="username" type="text" class="form-control" placeholder="Username" name="username"/>
 </div>
 <div class="form-group">
     <label for="password">Password</label>
-    <input id="password" type="password" class="form-control" placeholder="Password" name="password">
+    <input id="password" type="password" class="form-control" placeholder="Password" name="password"/>
 </div>
 <button id="loginBtn" type="submit" class="btn btn-primary">Login</button>
 </form>`;
