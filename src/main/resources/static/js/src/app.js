@@ -35,5 +35,23 @@ export function updateUserNav() {
     }
 }
 
+async function onIsLogged(params) {
+  let res = await fetch("http://localhost:8000/isLogged");
+  return await res.json();
+}
+
+let isLogged = await onIsLogged();
+if(!isLogged){
+  try {
+    const res = await fetch("http://localhost:8000/logout");
+    if(!res.ok){
+        throw new Error("Invalid request!!!");
+      }
+      sessionStorage.removeItem("userdata");
+     
+} catch (error) {
+    alert(error.message);
+}
+}
 updateUserNav();
 

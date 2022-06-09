@@ -2,7 +2,7 @@ import { html } from "../../node_modules/lit-html/lit-html.js";
 
 export const loginTemplate = (status, resData) => html`
 <div id="login-image">
-<img src="../img/img2.jpg" class="img-fluid" alt="Responsive image" style="width: 330px; height: 200px">
+<img src="../img/img7.jpg" class="img-fluid" alt="Responsive image" style="width: 330px; height: 200px">
 </div>
 
 <form id="login-form" class="border border-light p-5" method="POST">

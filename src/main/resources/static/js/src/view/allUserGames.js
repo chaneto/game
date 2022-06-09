@@ -12,8 +12,15 @@ let previous = document.getElementById("previous");
 let pegaNumberCurrent = 1;
 
 export async function allUsersGamePage() {
-
     pegaNumberCurrent = pageNumber.textContent;
+    let allGames = await getAllGames();
+    let allPages = Math.ceil(allGames / 4);
+    if(pegaNumberCurrent >= allPages){
+        next.style.display = "none";
+    }else{
+        next.style.display = "block";
+         }
+ 
        await viewProducts(pegaNumberCurrent - 1, onContinue, onHistory);
        pagination.style.display = "block";
        if(pegaNumberCurrent <= 1){

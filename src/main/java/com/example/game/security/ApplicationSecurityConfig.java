@@ -30,7 +30,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
       .disable()
       .authorizeRequests()
       .antMatchers("/js/**", "/css/**", "/img/**").permitAll()
-      .antMatchers("/", "/users/all", "/users/login", "/users/register")
+      .antMatchers("/", "/users/all", "/users/login", "/users/register", "/isLogged")
       .permitAll()
       .anyRequest()
       .authenticated()
