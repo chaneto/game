@@ -2,6 +2,7 @@ package com.example.game.web;
 
 import java.time.LocalDate;
 import com.example.game.exceptions.*;
+import com.example.game.exceptions.NullPointerException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -58,5 +59,15 @@ public class ControllerAdvisor {
       "Authorized exception!!!",
       ex.getMessage());
     return new ResponseEntity<>(message, HttpStatus.UNAUTHORIZED);
+  }
+
+  @ExceptionHandler(NullPointerException.class)
+  public ResponseEntity<ErrorMessage> nullPointerException(NullPointerException ex) {
+    ErrorMessage message = new ErrorMessage(
+      HttpStatus.NOT_FOUND.toString(),
+      LocalDate.now(),
+      "NullPointerException exception!!!",
+      ex.getMessage());
+    return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
   }
 }

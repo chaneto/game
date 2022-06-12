@@ -10,7 +10,8 @@ export async function gamePageHistory(gameId) {
     try {
         const res = await fetch(url + gameId);
         if(!res.ok){
-            throw new Error("Invalid request");
+            const resdataEx = await res.json();
+            throw new Error(resdataEx.description);
         }
         const resdata = await res.json();
         render(gameTemplate(resdata), main);

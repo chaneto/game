@@ -1,5 +1,6 @@
 package com.example.game.web;
 
+import java.util.List;
 import javax.validation.Valid;
 import com.example.game.model.entities.User;
 import com.example.game.services.UserService;
@@ -31,21 +32,21 @@ public class UserController {
 
   @ApiOperation(httpMethod = "POST", value = "Register User.", response = UserResource.class)
   @PostMapping("/register")
-  public ResponseEntity<?> register(@RequestBody @Valid UserCreateResource userCreateResource, BindingResult bindingResult) {
+  public ResponseEntity<UserResource> register(@RequestBody @Valid UserCreateResource userCreateResource, BindingResult bindingResult) {
     User user = this.userService.validateAndSafeUser(userCreateResource, bindingResult);
     return new ResponseEntity<>(this.userAssembler.assembleUserResource(user), HttpStatus.CREATED);
   }
 
   @ApiOperation(httpMethod = "POST", value = "Login User.", response = UserResource.class)
   @PostMapping("/login")
-  public ResponseEntity<?> login(@RequestBody @Valid UserCreateResource userCreateResource, BindingResult bindingResult){
+  public ResponseEntity<UserResource> login(@RequestBody @Valid UserCreateResource userCreateResource, BindingResult bindingResult){
     User user = this.userService.userLogin(userCreateResource, bindingResult);
     return new ResponseEntity<>(this.userAssembler.assembleUserResource(user), HttpStatus.OK);
   }
 
   @ApiOperation(httpMethod = "GET", value = "All registered users.", response = UserBestGameResource.class)
   @GetMapping("/all")
-  public ResponseEntity<?> getAllUserWithBestGame(){
+  public ResponseEntity<List<UserBestGameResource>> getAllUserWithBestGame(){
     return new ResponseEntity<>(this.userService.getAllUserWithBestGame(), HttpStatus.OK);
   }
 }

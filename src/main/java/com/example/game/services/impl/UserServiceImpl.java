@@ -3,8 +3,8 @@ package com.example.game.services.impl;
 import java.util.ArrayList;
 import java.util.List;
 import com.example.game.exceptions.LoginException;
+import com.example.game.exceptions.NullPointerException;
 import com.example.game.exceptions.UsernameException;
-import com.example.game.exceptions.NotFoundException;
 import com.example.game.exceptions.ValidationException;
 import com.example.game.model.entities.Game;
 import com.example.game.model.entities.User;
@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
     if (bindingResult.hasErrors()) {
       throw new ValidationException(getAllBindingsErrors(bindingResult).toString());
     } else if (user == null) {
-      throw new NotFoundException("Bad credentials");
+      throw new NullPointerException("Bad credentials");
     }
     authenticate(userCreateResource);
     return user;
@@ -71,10 +71,6 @@ public class UserServiceImpl implements UserService {
     }
     UserDetails userDetails = (UserDetails) authentication.getPrincipal();
     return this.userRepository.findByUsername(userDetails.getUsername());
-  }
-
-  @Override public void deleteById(Long id) {
-    this.userRepository.deleteById(id);
   }
 
   @Override public void setCurrentGame(Game currentGame, Long id) {
@@ -99,19 +95,8 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public List<UserBestGameResource> getAllUserWithBestGame() {
-    List<UserBestGameResource> userBestGameResources = new ArrayList<>();
-    List<String[]> users = this.userRepository.getAllUsersByGames();
-    for (int i = 0; i < users.size(); i++) {
-      UserBestGameResource userBestGameResource = new UserBestGameResource();
-      userBestGameResource.setUsername(users.get(i)[0]);
-      userBestGameResource.setNumberOfCompletedGames(users.get(i)[1]);
-      userBestGameResource.setBestNumberOfAttempts(users.get(i)[2]);
-      if (users.get(i)[3] != null) {
-        userBestGameResource.setBestTime(users.get(i)[3].substring(0, 8));
-      }
-      userBestGameResources.add(userBestGameResource);
-    }
-    return userBestGameResources;
+    List<UserBestGameResource> users = this.userRepository.getAllUsersByGames();
+    return users;
   }
 
   public void authenticate(UserCreateResource userCreateResource) {

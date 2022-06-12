@@ -21,8 +21,6 @@ public interface UserService {
 
   User getCurrentUser();
 
-  void deleteById(Long id);
-
   void authenticate(UserCreateResource userCreateResource);
 
   void setCurrentGame(Game currentGame, Long id);

@@ -3,7 +3,7 @@ import { html } from "../../node_modules/lit-html/lit-html.js";
 export const gameTemplate = (cowsAndBulls) => html`
 <div class="form-group">
 ${cowsAndBulls.length == 0 ? html` <div class="row d-flex d-wrap">
-the game has no attempts
+<h3 class="text-center" style="color:#1E10AD;">The game has no attempts!!!</h3>
 </div>` : html` <div class="row d-flex d-wrap">
 ${cowsAndBulls.map(p => cowsAndBullsCard(p))}
 </div>`}

@@ -2,6 +2,7 @@ package com.example.game.services.impl;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import com.example.game.exceptions.NullPointerException;
 import com.example.game.exceptions.UnauthorizedException;
 import com.example.game.exceptions.ValidationException;
 import com.example.game.model.entities.CowsAndBulls;
@@ -21,6 +22,7 @@ import org.springframework.validation.BindingResult;
 @Service
 public class GameServiceImpl implements GameService {
 
+  private final List<Integer> numbers = Arrays.asList(0,1, 2, 3,4,5,6,7,8,9);
   private final GameRepository gameRepository;
   private final UserService userService;
   private final CowsAndBullsRepository cowsAndBullsRepository;
@@ -33,7 +35,7 @@ public class GameServiceImpl implements GameService {
   }
 
   public List<CowsAndBulls> getGameHistory(Long id) {
-    Game game = this.gameRepository.findById(id).orElse(null);
+    Game game = this.gameRepository.findById(id).orElseThrow(() -> new NullPointerException("This game cannot be found!!!"));
     return game.getGameHistory();
   }
 
@@ -51,18 +53,18 @@ public class GameServiceImpl implements GameService {
   }
 
   public Game finishGame() {
-    Game game =
-      this.gameRepository.findById(this.userService.getCurrentUser().getCurrentGame().getId())
-        .orElse(null);
+    Game game = this.gameRepository.findById(this.userService.getCurrentUser().getCurrentGame().getId())
+        .orElseThrow(() -> new NullPointerException("This game cannot be found!!!"));
     game.setCompleted(true);
     game.setEndDate(LocalDateTime.now());
-    game.setNumberOfAttempts(Long.valueOf(game.getGameHistory().size()));
+    long numberAttempts = game.getGameHistory().size();
+    game.setNumberOfAttempts(numberAttempts);
     this.userService.setCurrentGame(null, this.userService.getCurrentUser().getId());
     return this.gameRepository.save(game);
   }
 
   public Game continueGame(Long id) {
-    Game game = this.gameRepository.findById(id).orElse(null);
+    Game game = this.gameRepository.findById(id).orElseThrow(() -> new NullPointerException("This game cannot be found!!!"));
     if (!game.getUser().getId().equals(this.userService.getCurrentUser().getId())) {
       throw new UnauthorizedException("You are not the owner of the game!!!");
     }
@@ -78,12 +80,12 @@ public class GameServiceImpl implements GameService {
     if(pagedResult.hasContent()) {
       return pagedResult.getContent();
     } else {
-      return new ArrayList<>();
+      return Collections.emptyList();
     }
   }
 
   @Override
-  public List<Game> findAllByUserIdSize(){
+  public List<Game> findAllCurrentUserGames(){
     return this.gameRepository.findAllByUserId(this.userService.getCurrentUser().getId());
   }
 
@@ -124,14 +126,15 @@ public class GameServiceImpl implements GameService {
     }
     CowsAndBulls cowsAndBulls = new CowsAndBulls(currentNumber.getNumber(), cows, bulls,
       this.gameRepository.findById(this.userService.getCurrentUser().getCurrentGame().getId())
-        .orElse(null));
+        .orElseThrow(() -> new NullPointerException("This game cannot be found!!!")));
     this.cowsAndBullsRepository.save(cowsAndBulls);
     Long id = this.userService.getCurrentUser().getCurrentGame().getId();
     if (bulls == 4) {
       finishGame();
     }
-    Game game = this.gameRepository.findById(id).orElse(null);
-    game.setNumberOfAttempts(Long.valueOf(game.getGameHistory().size()));
+    Game game = this.gameRepository.findById(id).orElseThrow(() -> new NullPointerException("This game cannot be found!!!"));
+    long numberAttempts = game.getGameHistory().size();
+    game.setNumberOfAttempts(numberAttempts);
     this.gameRepository.save(game);
     return game.getGameHistory();
   }
@@ -146,6 +149,7 @@ public class GameServiceImpl implements GameService {
         }
         if(currentNumber[i] == currentNumber[j]){
           allDigitsIsDifferent = false;
+          break;
         }
       }
     }
@@ -157,6 +161,7 @@ public class GameServiceImpl implements GameService {
       for (int j = 0; j < 4; j++) {
         if(!Character.isDigit(currentNumber[j])){
           isAllSymbolsIsDigit = false;
+          break;
         }
 
     }
@@ -166,10 +171,6 @@ public class GameServiceImpl implements GameService {
 
   public String getFourDigitsNumber() {
     String result = "";
-    List<Integer> numbers = new ArrayList<>();
-    for (int i = 0; i < 10; i++) {
-      numbers.add(i);
-    }
     Collections.shuffle(numbers);
     for (int i = 0; i < 4; i++) {
       result += numbers.get(i);

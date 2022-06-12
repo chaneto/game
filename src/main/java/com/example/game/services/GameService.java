@@ -9,7 +9,7 @@ import org.springframework.validation.BindingResult;
 public interface GameService {
   List<CowsAndBulls> getGameHistory(Long id);
 
-  List<Game> findAllByUserIdSize();
+  List<Game> findAllCurrentUserGames();
 
   Game createGame();
 

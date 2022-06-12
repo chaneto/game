@@ -147,6 +147,8 @@ position:relative;
 
 #quantityError{
 width: 265px;
+position: relative;
+left: 7px;
 }
 
 #footer{
