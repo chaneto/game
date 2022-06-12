@@ -50,7 +50,7 @@ public class GameServiceImplTest {
   public void setup() {
     for (int i = 0; i < this.userRepository.count(); i++) {
      User user = this.userRepository.findAll().get(i);
-     this.userService.deleteById(user.getId());
+     this.userRepository.deleteById(user.getId());
     }
     this.gameRepository.deleteAll();
 

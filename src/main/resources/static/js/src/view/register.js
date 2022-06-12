@@ -37,7 +37,6 @@ export async function registerPage() {
                   if(!res.ok){
                       status = "bad request";
                       return render(registerTemplate(status, resData.description), main);
-                      throw new Error(resData.description);
                     }
                    updateUserNav();
                    return loginPage();

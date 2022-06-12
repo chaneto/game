@@ -14,7 +14,6 @@ ${!finish ? html`
 </div>` : html`<h3 style="color:green;" class="text-center">Congratulations!!!</h3>
 <h3 style="color:green;" class="text-center">Attempts: ${game.numberOfAttempts}</h3>`}
 </div>
-
 <div id="game-image-left">
 <img src="../img/logo.png" class="img-fluid" alt="Responsive image" style="width: 330px; height: 250px">
 </div>
@@ -24,7 +23,7 @@ export const cowsAndBullsTemplate = (cowsAndBulls, currentHistory, status) => ht
 ${cowsAndBulls.length == 0 ? null : html`
 <div class="text-center"> ${currentHistory.map(p => cowsAndBullsCard(p))}
 </div>`}
-${status != "ok" ? html`<small id="quantityError" class="form-text bg-danger rounded">${cowsAndBulls.description}</small>` : null}
+${status != "ok" ? html`<small id="quantityError1" class="form-text bg-danger rounded">${cowsAndBulls.description}</small>` : null}
 `;
 
 const cowsAndBullsCard = (cowsAndBulls) => html`

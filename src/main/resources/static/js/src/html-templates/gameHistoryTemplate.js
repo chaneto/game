@@ -1,12 +1,15 @@
 import { html } from "../../node_modules/lit-html/lit-html.js";
 
-export const gameTemplate = (cowsAndBulls) => html`
+export const gameTemplate = (cowsAndBulls, error) => html`
 <div class="form-group">
-${cowsAndBulls.length == 0 ? html` <div class="row d-flex d-wrap">
-<h3 class="text-center" style="color:#1E10AD;">The game has no attempts!!!</h3>
-</div>` : html` <div class="row d-flex d-wrap">
-${cowsAndBulls.map(p => cowsAndBullsCard(p))}
-</div>`}
+   ${error ? html`<div class="alert alert-danger">
+ <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+  ${cowsAndBulls}
+ </div>` : html`${cowsAndBulls.length == 0 ? html` <div class="row d-flex d-wrap">
+ <h3 class="text-center" style="color:#1E10AD;">The game has no attempts!!!</h3>
+ </div>` : html` <div class="row d-flex d-wrap">
+ ${cowsAndBulls.map(p => cowsAndBullsCard(p))}
+ </div>`}`}
 </div>
 `;
 

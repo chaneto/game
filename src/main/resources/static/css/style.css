@@ -147,13 +147,40 @@ position:relative;
 
 #quantityError{
 width: 265px;
-position: relative;
+osition: relative;
 left: 7px;
+}
+
+#quantityError1{
+width: 265px;
+position: relative;
+left: 425px;
 }
 
 #footer{
 position: relative;
 top: 33px;
+}
+
+
+/* The alert message box */
+.alert {
+  padding: 20px;
+  background-color: #20B2AA;
+  color: white;
+  margin-bottom: 15px;
+}
+
+/* The close button */
+.closebtn {
+  margin-left: 15px;
+  color: white;
+  font-weight: bold;
+  float: right;
+  font-size: 22px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
 }
 
 

@@ -6,15 +6,17 @@ let pagination = document.getElementById("pagination");
 
 export async function gamePageHistory(gameId) {
     pagination.style.display = "none";
+    let error = false;
            
     try {
         const res = await fetch(url + gameId);
         if(!res.ok){
-            const resdataEx = await res.json();
-            throw new Error(resdataEx.description);
+            error = true;
+            const resDataEx = await res.json();
+            return render(gameTemplate(resDataEx.description, error), main);
         }
-        const resdata = await res.json();
-        render(gameTemplate(resdata), main);
+        const resData = await res.json();
+        render(gameTemplate(resData, error), main);
 
     } catch (error) {
         alert(error.message);

@@ -35,6 +35,7 @@ try {
    currentId = resdata.id;
    render(gameTemplate(resdata, finish), main);
    cowsAndBullsPage = document.querySelector("#cows-and-bulls");
+   currentHistory = [];
    render(cowsAndBullsTemplate([]), cowsAndBullsPage);
    compareBtn = document.querySelector("#compareBtn");
    yourNumber = document.querySelector("#yourNumber");
@@ -49,6 +50,7 @@ export async function continueGamePage(gameId) {
     currentId = gameId;
     pagination.style.display = "none";
     finish = false;
+    let error = false;
            
     try {
         const res = await fetch(url + gameId);
@@ -56,7 +58,7 @@ export async function continueGamePage(gameId) {
             throw new Error("Invalid Request");
         }
         const resdata = await res.json();
-        render(gameTemplate(resdata, finish), main);
+        render(gameTemplate(resdata, finish, error), main);
         status = "ok";
         cowsAndBullsPage = document.querySelector("#cows-and-bulls");
 
@@ -101,7 +103,7 @@ async function compare(event) {
                    let arrayLength = cowsAndBulls.length;
                     if(!result.ok){
                      status = "bad request";
-                     return render(cowsAndBullsTemplate(cowsAndBulls,currentHistory ,status), cowsAndBullsPage);
+                     return render(cowsAndBullsTemplate(cowsAndBulls, currentHistory ,status), cowsAndBullsPage);
 
                     }
                     if(cowsAndBulls[arrayLength - 1].bulls == 4){

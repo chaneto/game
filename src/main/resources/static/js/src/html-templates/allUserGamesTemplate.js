@@ -9,7 +9,7 @@ html`
 ${games.length != 0 ? html`<div class="row d-flex d-wrap">
      ${games.map(p => gameCard(p, onContinue,onHistory))}
     </div>` : html`<div class="row d-flex d-wrap">
-    You have no games played
+    <h3 class="text-center" style="color:#1E10AD;">You have no games played!!!</h3>
    </div>`}
 </div>
 `;

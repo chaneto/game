@@ -34,7 +34,6 @@ export async function loginPage() {
                    if(!res.ok){
                        status = "bad request";
                        return render(loginTemplate(status, resData.description), main);
-                       throw new Error(resData.description);
                      }
                      
                      const userdata = {

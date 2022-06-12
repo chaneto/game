@@ -74,6 +74,9 @@ public class GameServiceImpl implements GameService {
 
   @Override
   public List<Game> findAllByUserId(Integer pageNo, Integer pageSize) {
+    if(pageNo < 0){
+      throw new ValidationException("Page index must not be less than zero!!!");
+    }
     Sort sort = Sort.by("id").descending();
     Pageable paging = PageRequest.of(pageNo, pageSize, sort);
     Page<Game> pagedResult = this.gameRepository.findAllByUserId(this.userService.getCurrentUser().getId(), paging);
