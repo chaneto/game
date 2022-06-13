@@ -97,8 +97,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public List<UserBestGameResource> getAllUserWithBestGame() {
-    List<UserBestGameResource> users = this.userRepository.getAllUsersByGames();
-    return users;
+    return this.userRepository.getAllUsersByGames();
   }
 
   public void authenticate(UserCreateResource userCreateResource) {

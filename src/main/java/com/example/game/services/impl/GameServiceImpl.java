@@ -37,8 +37,7 @@ public class GameServiceImpl implements GameService {
   }
 
   public List<CowsAndBulls> getGameHistory(Long id) {
-    Game game = this.gameRepository.findById(id)
-      .orElseThrow(() -> new NullPointerException("This game cannot be found!!!"));
+    Game game = this.gameRepository.findById(id).orElseThrow(() -> new NullPointerException("This game cannot be found!!!"));
     return game.getGameHistory();
   }
 
@@ -68,8 +67,7 @@ public class GameServiceImpl implements GameService {
   }
 
   public Game continueGame(Long id) {
-    Game game = this.gameRepository.findById(id)
-      .orElseThrow(() -> new NullPointerException("This game cannot be found!!!"));
+    Game game = this.gameRepository.findById(id).orElseThrow(() -> new NullPointerException("This game cannot be found!!!"));
     if (!game.getUser().getId().equals(this.userService.getCurrentUser().getId())) {
       throw new UnauthorizedException("You are not the owner of the game!!!");
     }
@@ -100,8 +98,7 @@ public class GameServiceImpl implements GameService {
 
   public List<CowsAndBulls> compare(NumberResource currentNumber, BindingResult bindingResult) {
     if (bindingResult.hasErrors()) {
-      throw new ValidationException(
-        this.userService.getAllBindingsErrors(bindingResult).toString());
+      throw new ValidationException(this.userService.getAllBindingsErrors(bindingResult).toString());
     }
 
     Character[] currentNum = new Character[4];
@@ -141,8 +138,7 @@ public class GameServiceImpl implements GameService {
     if (bulls == 4) {
       finishGame();
     }
-    Game game = this.gameRepository.findById(id)
-      .orElseThrow(() -> new NullPointerException("This game cannot be found!!!"));
+    Game game = this.gameRepository.findById(id).orElseThrow(() -> new NullPointerException("This game cannot be found!!!"));
     long numberAttempts = game.getGameHistory().size();
     game.setNumberOfAttempts(numberAttempts);
     this.gameRepository.save(game);
