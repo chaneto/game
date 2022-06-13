@@ -18,7 +18,7 @@ public class HomeController {
 
   @GetMapping("/isLogged")
   @ResponseBody
-  public boolean isLogged(){
+  public boolean isLogged() {
     boolean isLogged = true;
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     if (authentication.getName().equals("anonymousUser")) {

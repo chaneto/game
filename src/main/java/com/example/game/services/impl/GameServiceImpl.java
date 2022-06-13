@@ -12,6 +12,7 @@ import com.example.game.repositories.GameRepository;
 import com.example.game.services.GameService;
 import com.example.game.services.UserService;
 import com.example.game.web.resources.NumberResource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,11 +23,12 @@ import org.springframework.validation.BindingResult;
 @Service
 public class GameServiceImpl implements GameService {
 
-  private final List<Integer> numbers = Arrays.asList(0,1, 2, 3,4,5,6,7,8,9);
+  private final List<Integer> numbers = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
   private final GameRepository gameRepository;
   private final UserService userService;
   private final CowsAndBullsRepository cowsAndBullsRepository;
 
+  @Autowired
   public GameServiceImpl(GameRepository gameRepository, UserService userService,
     CowsAndBullsRepository cowsAndBullsRepository) {
     this.gameRepository = gameRepository;
@@ -35,7 +37,8 @@ public class GameServiceImpl implements GameService {
   }
 
   public List<CowsAndBulls> getGameHistory(Long id) {
-    Game game = this.gameRepository.findById(id).orElseThrow(() -> new NullPointerException("This game cannot be found!!!"));
+    Game game = this.gameRepository.findById(id)
+      .orElseThrow(() -> new NullPointerException("This game cannot be found!!!"));
     return game.getGameHistory();
   }
 
@@ -53,7 +56,8 @@ public class GameServiceImpl implements GameService {
   }
 
   public Game finishGame() {
-    Game game = this.gameRepository.findById(this.userService.getCurrentUser().getCurrentGame().getId())
+    Game game =
+      this.gameRepository.findById(this.userService.getCurrentUser().getCurrentGame().getId())
         .orElseThrow(() -> new NullPointerException("This game cannot be found!!!"));
     game.setCompleted(true);
     game.setEndDate(LocalDateTime.now());
@@ -64,7 +68,8 @@ public class GameServiceImpl implements GameService {
   }
 
   public Game continueGame(Long id) {
-    Game game = this.gameRepository.findById(id).orElseThrow(() -> new NullPointerException("This game cannot be found!!!"));
+    Game game = this.gameRepository.findById(id)
+      .orElseThrow(() -> new NullPointerException("This game cannot be found!!!"));
     if (!game.getUser().getId().equals(this.userService.getCurrentUser().getId())) {
       throw new UnauthorizedException("You are not the owner of the game!!!");
     }
@@ -74,13 +79,14 @@ public class GameServiceImpl implements GameService {
 
   @Override
   public List<Game> findAllByUserId(Integer pageNo, Integer pageSize) {
-    if(pageNo < 0){
+    if (pageNo < 0) {
       throw new ValidationException("Page index must not be less than zero!!!");
     }
     Sort sort = Sort.by("id").descending();
     Pageable paging = PageRequest.of(pageNo, pageSize, sort);
-    Page<Game> pagedResult = this.gameRepository.findAllByUserId(this.userService.getCurrentUser().getId(), paging);
-    if(pagedResult.hasContent()) {
+    Page<Game> pagedResult =
+      this.gameRepository.findAllByUserId(this.userService.getCurrentUser().getId(), paging);
+    if (pagedResult.hasContent()) {
       return pagedResult.getContent();
     } else {
       return Collections.emptyList();
@@ -88,7 +94,7 @@ public class GameServiceImpl implements GameService {
   }
 
   @Override
-  public List<Game> findAllCurrentUserGames(){
+  public List<Game> findAllCurrentUserGames() {
     return this.gameRepository.findAllByUserId(this.userService.getCurrentUser().getId());
   }
 
@@ -106,11 +112,11 @@ public class GameServiceImpl implements GameService {
       serverNum[i] = this.userService.getCurrentUser().getCurrentGame().getServerNumber().charAt(i);
     }
 
-    if(!isAllDigitsIsDifferent(currentNum)){
+    if (!isAllDigitsIsDifferent(currentNum)) {
       throw new ValidationException("The digits must be different!!!");
     }
 
-    if(!isAllSymbolsIsDigit(currentNum)){
+    if (!isAllSymbolsIsDigit(currentNum)) {
       throw new ValidationException("Must all symbols is digit!!!");
     }
 
@@ -135,7 +141,8 @@ public class GameServiceImpl implements GameService {
     if (bulls == 4) {
       finishGame();
     }
-    Game game = this.gameRepository.findById(id).orElseThrow(() -> new NullPointerException("This game cannot be found!!!"));
+    Game game = this.gameRepository.findById(id)
+      .orElseThrow(() -> new NullPointerException("This game cannot be found!!!"));
     long numberAttempts = game.getGameHistory().size();
     game.setNumberOfAttempts(numberAttempts);
     this.gameRepository.save(game);
@@ -147,10 +154,10 @@ public class GameServiceImpl implements GameService {
 
     for (int i = 0; i < 4; i++) {
       for (int j = 0; j < 4; j++) {
-        if(i == j){
+        if (i == j) {
           continue;
         }
-        if(currentNumber[i] == currentNumber[j]){
+        if (currentNumber[i] == currentNumber[j]) {
           allDigitsIsDifferent = false;
           break;
         }
@@ -161,11 +168,11 @@ public class GameServiceImpl implements GameService {
 
   public boolean isAllSymbolsIsDigit(Character[] currentNumber) {
     boolean isAllSymbolsIsDigit = true;
-      for (int j = 0; j < 4; j++) {
-        if(!Character.isDigit(currentNumber[j])){
-          isAllSymbolsIsDigit = false;
-          break;
-        }
+    for (int j = 0; j < 4; j++) {
+      if (!Character.isDigit(currentNumber[j])) {
+        isAllSymbolsIsDigit = false;
+        break;
+      }
 
     }
     return isAllSymbolsIsDigit;

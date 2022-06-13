@@ -12,16 +12,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class GameAssembler {
 
-  public GameResource assembleGameResource(Game game){
+  public GameResource assembleGameResource(Game game) {
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     GameResource gameResource = new GameResource();
     gameResource.setId(game.getId());
     gameResource.setServerNumber(game.getServerNumber());
-    if(game.getStartDate() != null){
-    gameResource.setStartDate(game.getStartDate().format(formatter));
+    if (game.getStartDate() != null) {
+      gameResource.setStartDate(game.getStartDate().format(formatter));
     }
-    if(game.getEndDate() != null){
-    gameResource.setEndDate(game.getEndDate().format(formatter));
+    if (game.getEndDate() != null) {
+      gameResource.setEndDate(game.getEndDate().format(formatter));
     }
     gameResource.setCompleted(game.isCompleted());
     gameResource.setNumberOfAttempts(game.getNumberOfAttempts());
@@ -37,7 +37,7 @@ public class GameAssembler {
 
   public List<CowsAndBullsResource> assembleCowsAndBullsResource(List<CowsAndBulls> cowsAndBulls) {
     List<CowsAndBullsResource> cowsAndBullsResources = new ArrayList<>();
-    for (CowsAndBulls item : cowsAndBulls){
+    for (CowsAndBulls item : cowsAndBulls) {
       CowsAndBullsResource cowsAndBullsResource = new CowsAndBullsResource();
       cowsAndBullsResource.setNumber(item.getNumber());
       cowsAndBullsResource.setBulls(item.getBulls());

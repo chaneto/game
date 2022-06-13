@@ -15,12 +15,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 public interface GameRepository extends JpaRepository<Game, Long> {
 
-   List<Game> findAllByUserId(Long id);
+  List<Game> findAllByUserId(Long id);
 
-   Page<Game> findAllByUserId(Long id, Pageable pageable);
+  Page<Game> findAllByUserId(Long id, Pageable pageable);
 
-   @Modifying
-   @Transactional
-   @Query("update Game as g set g.user = :user where g.id = :id")
-   void setUser(@Param("user")User user, @Param("id") Long id);
+  @Modifying
+  @Transactional
+  @Query("update Game as g set g.user = :user where g.id = :id")
+  void setUser(@Param("user") User user, @Param("id") Long id);
 }

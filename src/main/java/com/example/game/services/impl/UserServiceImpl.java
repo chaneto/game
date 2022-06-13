@@ -12,6 +12,7 @@ import com.example.game.repositories.UserRepository;
 import com.example.game.services.UserService;
 import com.example.game.web.resources.UserBestGameResource;
 import com.example.game.web.resources.UserCreateResource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,6 +28,7 @@ public class UserServiceImpl implements UserService {
   private final GameUserDetailService gameUserDetailService;
   private final PasswordEncoder passwordEncoder;
 
+  @Autowired
   public UserServiceImpl(UserRepository userRepository,
     GameUserDetailService gameUserDetailService,
     PasswordEncoder passwordEncoder) {

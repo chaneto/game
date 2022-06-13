@@ -10,7 +10,8 @@ public class UserBestGameResource {
   public UserBestGameResource() {
   }
 
-  public UserBestGameResource(String username, String numberOfCompletedGames, String bestNumberOfAttempts,
+  public UserBestGameResource(String username, String numberOfCompletedGames,
+    String bestNumberOfAttempts,
     String bestTime) {
     this.username = username;
     this.numberOfCompletedGames = numberOfCompletedGames;

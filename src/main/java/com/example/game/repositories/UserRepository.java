@@ -1,11 +1,9 @@
 package com.example.game.repositories;
 
 import java.util.List;
-
 import com.example.game.model.entities.Game;
 import com.example.game.model.entities.User;
 import com.example.game.web.resources.UserBestGameResource;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
