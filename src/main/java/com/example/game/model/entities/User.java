@@ -23,8 +23,8 @@ import com.example.game.web.resources.UserBestGameResource;
 @NamedNativeQuery(name="getAllUsersByGames",
   resultSetMapping="myMapping",
   query="select u.username as username,\n" +
-    "    (select cast(count(game) as varchar) from games as game where game.end_date is not null and game.user_id = u.id) as numberOfCompletedGames ,\n" +
-    "    (select cast(game.number_of_attempts as varchar) from games as game where game.end_date is not null and game.user_id = u.id order by game.number_of_attempts limit 1) as bestNumberOfAttempts,\n" +
+    "    (select count(game) from games as game where game.end_date is not null and game.user_id = u.id) as numberOfCompletedGames ,\n" +
+    "    (select game.number_of_attempts from games as game where game.end_date is not null and game.user_id = u.id order by game.number_of_attempts limit 1) as bestNumberOfAttempts,\n" +
     "    (select substring(cast((game.end_date - game.start_date) as varchar) from 0 for 9) from games as game where game.end_date is not null and game.user_id = u.id order by (game.end_date - game.start_date) limit 1) as bestTime\n" +
     "    from users as u\n" +
     "    where (select count(game) from games as game where game.end_date is not null and game.user_id = u.id) != 0\n" +
