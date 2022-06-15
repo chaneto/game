@@ -42,9 +42,6 @@ public class ControllerAdvisor {
   }
 
   @ExceptionHandler(LoginException.class)
-
-
-
   public ResponseEntity<ErrorMessage> loginException(LoginException ex) {
     ErrorMessage message = new ErrorMessage(
       HttpStatus.BAD_REQUEST.toString(),
