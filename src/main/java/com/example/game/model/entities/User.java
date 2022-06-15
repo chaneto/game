@@ -4,32 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
-import com.example.game.web.resources.UserBestGameResource;
-
-@SqlResultSetMapping(
-  name = "myMapping",
-  classes = {
-    @ConstructorResult(
-      targetClass = UserBestGameResource.class,
-      columns = {
-        @ColumnResult(name = "username", type = String.class),
-        @ColumnResult(name = "numberOfCompletedGames", type = String.class),
-        @ColumnResult(name = "bestNumberOfAttempts", type = String.class),
-        @ColumnResult(name = "bestTime", type = String.class)
-      }
-    )
-  }
-)
-@NamedNativeQuery(name = "getAllUsersByGames",
-  resultSetMapping = "myMapping",
-  query = "select u.username as username,\n" +
-    "    (select count(game) from games as game where game.end_date is not null and game.user_id = u.id) as numberOfCompletedGames ,\n" +
-    "    (select game.number_of_attempts from games as game where game.end_date is not null and game.user_id = u.id order by game.number_of_attempts limit 1) as bestNumberOfAttempts,\n" +
-    "    (select substring(cast((game.end_date - game.start_date) as varchar) from 0 for 9) from games as game where game.end_date is not null and game.user_id = u.id order by (game.end_date - game.start_date) limit 1) as bestTime\n" +
-    "    from users as u\n" +
-    "    where (select count(game) from games as game where game.end_date is not null and game.user_id = u.id) != 0\n" +
-    "    order by\n" +
-    "    bestNumberOfAttempts, bestTime, numberOfCompletedGames;")
 
 @Entity
 @Table(name = "users")
