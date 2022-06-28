@@ -13,6 +13,8 @@ import com.example.game.services.GameService;
 import com.example.game.services.UserService;
 import com.example.game.web.resources.NumberResource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -36,11 +38,15 @@ public class GameServiceImpl implements GameService {
     this.cowsAndBullsRepository = cowsAndBullsRepository;
   }
 
+  @Override
+  @Cacheable(value = "cowsAndBulls", key = "#id")
   public List<CowsAndBulls> getGameHistory(Long id) {
     Game game = this.gameRepository.findById(id).orElseThrow(() -> new NullPointerException("This game cannot be found!!!"));
     return game.getGameHistory();
   }
 
+  @Override
+  @CacheEvict(value = {"games", "users"}, allEntries = true)
   public Game createGame() {
     Game game = new Game();
     game.setNumberOfAttempts(0L);
@@ -49,11 +55,16 @@ public class GameServiceImpl implements GameService {
     game.setUser(
       this.userService.getUserByUsername(this.userService.getCurrentUser().getUsername()));
     game.setServerNumber(getFourDigitsNumber());
-    Game saveGame = this.gameRepository.save(game);
+    Game saveGame = saveGame(game);
     this.userService.setCurrentGame(saveGame, this.userService.getCurrentUser().getId());
     return saveGame;
   }
 
+  public Game saveGame(Game game){
+   return this.gameRepository.save(game);
+  }
+
+  @Override
   public Game finishGame() {
     Game game =
       this.gameRepository.findById(this.userService.getCurrentUser().getCurrentGame().getId())
@@ -63,9 +74,11 @@ public class GameServiceImpl implements GameService {
     long numberAttempts = game.getGameHistory().size();
     game.setNumberOfAttempts(numberAttempts);
     this.userService.setCurrentGame(null, this.userService.getCurrentUser().getId());
-    return this.gameRepository.save(game);
+    return saveGame(game);
   }
 
+  @Override
+  @Cacheable(value = "continue", key = "#id")
   public Game continueGame(Long id) {
     Game game = this.gameRepository.findById(id).orElseThrow(() -> new NullPointerException("This game cannot be found!!!"));
     if (!game.getUser().getId().equals(this.userService.getCurrentUser().getId())) {
@@ -76,6 +89,7 @@ public class GameServiceImpl implements GameService {
   }
 
   @Override
+  @Cacheable(value = "games", key = "#pageNo")
   public List<Game> findAllByUserId(Integer pageNo, Integer pageSize) {
     if (pageNo < 0) {
       throw new ValidationException("Page index must not be less than zero!!!");
@@ -92,10 +106,17 @@ public class GameServiceImpl implements GameService {
   }
 
   @Override
+  @Cacheable(value = "games")
   public List<Game> findAllCurrentUserGames() {
     return this.gameRepository.findAllByUserId(this.userService.getCurrentUser().getId());
   }
 
+    public void saveCowsAndBulls(CowsAndBulls cowsAndBulls){
+    this.cowsAndBullsRepository.save(cowsAndBulls);
+  }
+
+  @Override
+  @CacheEvict(value = {"cowsAndBulls", "continue", "games"}, allEntries = true)
   public List<CowsAndBulls> compare(NumberResource currentNumber, BindingResult bindingResult) {
     if (bindingResult.hasErrors()) {
       throw new ValidationException(this.userService.getAllBindingsErrors(bindingResult).toString());
@@ -133,7 +154,7 @@ public class GameServiceImpl implements GameService {
     CowsAndBulls cowsAndBulls = new CowsAndBulls(currentNumber.getNumber(), cows, bulls,
       this.gameRepository.findById(this.userService.getCurrentUser().getCurrentGame().getId())
         .orElseThrow(() -> new NullPointerException("This game cannot be found!!!")));
-    this.cowsAndBullsRepository.save(cowsAndBulls);
+    saveCowsAndBulls(cowsAndBulls);
     Long id = this.userService.getCurrentUser().getCurrentGame().getId();
     if (bulls == 4) {
       finishGame();

@@ -13,6 +13,8 @@ import com.example.game.services.UserService;
 import com.example.game.web.resources.UserBestGameResource;
 import com.example.game.web.resources.UserCreateResource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -38,7 +40,8 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public User validateAndSafeUser(UserCreateResource userCreateResource,
+  @CacheEvict(value = "users", allEntries = true)
+   public User validateAndSafeUser(UserCreateResource userCreateResource,
     BindingResult bindingResult) {
     User user = new User();
     if (bindingResult.hasErrors()) {
@@ -96,6 +99,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
+  @Cacheable(value = "users")
   public List<UserBestGameResource> getAllUserWithBestGame() {
     return this.userRepository.getAllUsersByGames();
   }
