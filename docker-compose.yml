@@ -1,0 +1,32 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:14.1-alpine
+    container_name: cowsAndBulls-db-container
+    restart: always
+    expose:
+      - 5433
+    environment:
+      - POSTGRES_USER=chaneto
+      - POSTGRES_PASSWORD=12345
+  api:
+    container_name: cowsAndBulls-game-container
+    build:
+      context: .
+    image: games
+    depends_on:
+      - db
+    ports:
+      - 8000:8000
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal:5433/games_db
+      - SPRING_DATASOURCE_USERNAME=chaneto
+      - SPRING_DATASOURCE_PASSWORD=12345
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    links:
+      - db
+    volumes:
+      - './:/src'
+volumes:
+  db:
+    driver: local

@@ -2,14 +2,29 @@ plugins {
 	id 'org.springframework.boot' version '2.7.0'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
+	id "com.palantir.docker" version "0.22.1"
+	id "com.palantir.docker-run" version "0.22.1"
 }
 
 group = 'com.example'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '18'
+sourceCompatibility = '11'
 
 repositories {
 	mavenCentral()
+	maven {
+		url "https://plugins.gradle.org/m2/"
+	}
+}
+
+jar {
+	manifest {
+		attributes "Main-Class": "com.example.game.GameApplication"
+	}
+
+	from {
+		configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+	}
 }
 
 dependencies {
@@ -28,8 +43,28 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 	testImplementation group: 'com.h2database', name: 'h2', version: '2.1.212'
 	testImplementation group: 'junit', name: 'junit', version: '4.13.2'
+	implementation "com.palantir.gradle.docker:gradle-docker:0.22.1"
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+docker {
+	name "game:0.1"
+	files "$buildDir/libs/${project.name}-${project.version.toString().toLowerCase()}.jar"
+	buildArgs(['JAR_FILE': "${project.name}-${project.version.toString().toLowerCase()}.jar"])
+}
+
+dockerRun {
+	name "game"
+	image "game:0.1"
+	ports '8080:8080'
+	clean true
+	daemonize false
+}
+
+
+
+
+
