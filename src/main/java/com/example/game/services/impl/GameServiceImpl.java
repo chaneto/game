@@ -60,11 +60,13 @@ public class GameServiceImpl implements GameService {
     return saveGame;
   }
 
+  @CacheEvict(value = "users", allEntries = true)
   public Game saveGame(Game game){
    return this.gameRepository.save(game);
   }
 
   @Override
+  @CacheEvict(value = "users", allEntries = true)
   public Game finishGame() {
     Game game =
       this.gameRepository.findById(this.userService.getCurrentUser().getCurrentGame().getId())

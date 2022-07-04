@@ -58,6 +58,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
+  @CacheEvict(value = "games", allEntries = true)
   public User userLogin(UserCreateResource userCreateResource, BindingResult bindingResult) {
     User user = this.userRepository.findByUsername(userCreateResource.getUsername());
     if (bindingResult.hasErrors()) {

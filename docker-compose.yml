@@ -2,7 +2,6 @@ version: '3.8'
 services:
   db:
     image: postgres:14.1-alpine
-    container_name: cowsAndBulls-db-container
     restart: always
     expose:
       - 5433
@@ -10,10 +9,10 @@ services:
       - POSTGRES_USER=chaneto
       - POSTGRES_PASSWORD=12345
   api:
-    container_name: cowsAndBulls-game-container
+    container_name: game-container
     build:
       context: .
-    image: games
+    image: game
     depends_on:
       - db
     ports:
