@@ -1,5 +1,6 @@
 package com.example.game.model.entities;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "games")
-public class Game {
+public class Game implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

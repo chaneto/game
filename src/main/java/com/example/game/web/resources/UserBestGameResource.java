@@ -1,7 +1,9 @@
 package com.example.game.web.resources;
 
 
-public class UserBestGameResource {
+import java.io.Serializable;
+
+public class UserBestGameResource implements Serializable {
   private String username;
   private String numberOfCompletedGames;
   private String bestNumberOfAttempts;

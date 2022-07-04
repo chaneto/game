@@ -1,5 +1,6 @@
 package com.example.game.model.entities;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.*;
@@ -33,7 +34,7 @@ import com.example.game.web.resources.UserBestGameResource;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

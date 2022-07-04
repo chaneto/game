@@ -25,4 +25,6 @@ public interface UserService {
 
   void setCurrentGame(Game currentGame, Long id);
 
+  public void setCurrentGameToNull();
+
 }

@@ -40,7 +40,6 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  @CacheEvict(value = "users", allEntries = true)
    public User validateAndSafeUser(UserCreateResource userCreateResource,
     BindingResult bindingResult) {
     User user = new User();
@@ -81,6 +80,12 @@ public class UserServiceImpl implements UserService {
 
   @Override public void setCurrentGame(Game currentGame, Long id) {
     this.userRepository.setCurrentGame(currentGame, id);
+  }
+
+  @Override
+  @CacheEvict(value = "users")
+  public void setCurrentGameToNull() {
+    this.userRepository.setCurrentGame(null, getCurrentUser().getId());
   }
 
   @Override

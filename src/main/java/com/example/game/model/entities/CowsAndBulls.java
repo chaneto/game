@@ -1,12 +1,14 @@
 package com.example.game.model.entities;
 
+import java.io.Serializable;
+
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 
 @Entity
 @Table(name ="cows_and_bulls")
-public class CowsAndBulls {
+public class CowsAndBulls implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
