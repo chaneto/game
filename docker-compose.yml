@@ -10,8 +10,8 @@ services:
     volumes:
       - ./data:/data
     restart: always
-    networks:
-      - redis_net
+    environment:
+      - TZ=Europe/Sofia
   db:
     image: postgres:14.1-alpine
     restart: always
@@ -20,6 +20,7 @@ services:
     environment:
       - POSTGRES_USER=chaneto
       - POSTGRES_PASSWORD=12345
+      - TZ=Europe/Sofia
   api:
     container_name: game-container
     build:
@@ -36,24 +37,8 @@ services:
       - SPRING_DATASOURCE_USERNAME=chaneto
       - SPRING_DATASOURCE_PASSWORD=12345
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
-      - WAIT_HOST=redis:6379
-      - WAIT_HOSTS_TIMEOUT=300
-      - WAIT_SLEEP_INTERVAL=30
-      - WAIT_HOST_CONNECT_TIMEOUT=30
       - TZ=Europe/Sofia
     links:
       - redis:redis
       - db
-    volumes:
-      - './:/src'
-      - /etc/timezone:/etc/timezone:ro
-      - /etc/localtime:/etc/localtime:ro
-    networks:
-      - redis_net
-volumes:
-  db:
-    driver: local
 
-networks:
-  redis_net:
-    driver: bridge
