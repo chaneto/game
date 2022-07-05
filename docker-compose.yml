@@ -41,4 +41,3 @@ services:
     links:
       - redis:redis
       - db
-

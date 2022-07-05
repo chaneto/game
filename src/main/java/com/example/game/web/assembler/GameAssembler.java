@@ -30,8 +30,9 @@ public class GameAssembler {
 
   public List<GameResource> assembleGamesResource(List<Game> games) {
     List<GameResource> gameResources = new ArrayList<>();
-    for (Game game : games)
+    for (Game game : games){
       gameResources.add(assembleGameResource(game));
+    }
     return gameResources;
   }
 
