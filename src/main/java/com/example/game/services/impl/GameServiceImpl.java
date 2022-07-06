@@ -12,10 +12,11 @@ import com.example.game.repositories.GameRepository;
 import com.example.game.services.GameService;
 import com.example.game.services.UserService;
 import com.example.game.web.resources.NumberResource;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -114,13 +115,20 @@ public class GameServiceImpl implements GameService {
     return this.gameRepository.findAllByUserId(this.userService.getCurrentUser().getId());
   }
 
-  public void saveCowsAndBulls(CowsAndBulls cowsAndBulls) {
+  public void createAndSaveCowsAndBulls(String currentNumber,int cows,int bulls, Game currentGame) {
+    CowsAndBulls cowsAndBulls = new CowsAndBulls(currentNumber, cows, bulls, currentGame);
     this.cowsAndBullsRepository.save(cowsAndBulls);
   }
 
   @Override
-  @CacheEvict(value = {"games", "continue", "history"}, allEntries = true)
-  public List<CowsAndBulls> compare(NumberResource currentNumber, BindingResult bindingResult) {
+  public Long getCurrentGameId(){
+  return this.userService.getCurrentUser().getCurrentGame().getId();
+  }
+
+  @Override
+  @Caching(evict = { @CacheEvict(value = {"games", "continue"}, allEntries = true)},
+    put = { @CachePut(value = {"history"}, key = "#currentGameId")})
+  public List<CowsAndBulls> compare(NumberResource currentNumber, BindingResult bindingResult, Long currentGameId) {
     if (bindingResult.hasErrors()) {
       throw new ValidationException(
         this.userService.getAllBindingsErrors(bindingResult).toString());
@@ -142,6 +150,21 @@ public class GameServiceImpl implements GameService {
       throw new ValidationException("Must all symbols is digit!!!");
     }
 
+    Integer[] cowsAndBullsCompare = getCowsAndBulls(currentNum, serverNum, getCurrentGameId());
+    int cows = cowsAndBullsCompare[0];
+    int bulls = cowsAndBullsCompare[1];
+    createAndSaveCowsAndBulls(currentNumber.getNumber(), cows, bulls, this.gameRepository.findById(currentGameId).orElseThrow(() -> new NullPointerException("This game cannot be found!!!")));
+    if (bulls == 4) {
+      finishGame();
+    }
+    Game game = this.gameRepository.findById(currentGameId).orElseThrow(() -> new NullPointerException("This game cannot be found!!!"));;
+    long numberAttempts = game.getGameHistory().size();
+    game.setNumberOfAttempts(numberAttempts);
+    this.gameRepository.save(game);
+    return game.getGameHistory();
+  }
+
+  public Integer[] getCowsAndBulls( Character[] currentNum, Character[] serverNum, Long id){
     int cows = 0;
     int bulls = 0;
     for (int i = 0; i < 4; i++) {
@@ -153,22 +176,8 @@ public class GameServiceImpl implements GameService {
           cows++;
         }
       }
-
     }
-    CowsAndBulls cowsAndBulls = new CowsAndBulls(currentNumber.getNumber(), cows, bulls,
-      this.gameRepository.findById(this.userService.getCurrentUser().getCurrentGame().getId())
-        .orElseThrow(() -> new NullPointerException("This game cannot be found!!!")));
-    saveCowsAndBulls(cowsAndBulls);
-    Long id = this.userService.getCurrentUser().getCurrentGame().getId();
-    if (bulls == 4) {
-      finishGame();
-    }
-    Game game = this.gameRepository.findById(id)
-      .orElseThrow(() -> new NullPointerException("This game cannot be found!!!"));
-    long numberAttempts = game.getGameHistory().size();
-    game.setNumberOfAttempts(numberAttempts);
-    this.gameRepository.save(game);
-    return game.getGameHistory();
+    return new Integer[]{cows, bulls};
   }
 
   public boolean isAllDigitsIsDifferent(Character[] currentNumber) {

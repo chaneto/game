@@ -49,7 +49,8 @@ public class GameController {
   @PostMapping("/compare")
   public ResponseEntity<List<CowsAndBullsResource>> compare(
     @RequestBody @Valid NumberResource numberResource, BindingResult bindingResult) {
-    List<CowsAndBulls> cowsAndBulls = this.gameService.compare(numberResource, bindingResult);
+    Long gameId  = this.gameService.getCurrentGameId();
+    List<CowsAndBulls> cowsAndBulls = this.gameService.compare(numberResource, bindingResult, gameId);
     return new ResponseEntity<>(this.gameAssembler.assembleCowsAndBullsResource(cowsAndBulls),
       HttpStatus.OK);
   }

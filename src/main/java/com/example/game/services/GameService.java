@@ -21,11 +21,13 @@ public interface GameService {
 
   boolean isAllSymbolsIsDigit(Character[] currentNumber);
 
-  List<CowsAndBulls> compare(NumberResource currentNumber, BindingResult bindingResult);
+  List<CowsAndBulls> compare(NumberResource currentNumber, BindingResult bindingResult, Long currentGameId);
 
   String getFourDigitsNumber();
 
   Game continueGame(Long id);
 
   List<Game> findAllByUserId(Integer pageNo, Integer pageSize);
+
+  Long getCurrentGameId();
 }

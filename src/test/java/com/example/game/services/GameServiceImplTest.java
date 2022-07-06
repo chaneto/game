@@ -160,7 +160,7 @@ public class GameServiceImplTest {
     Game game = this.gameService.createGame();
     NumberResource numberResource = new NumberResource();
     numberResource.setNumber("123");
-    this.gameService.compare(numberResource, bindingResultTrue);
+    this.gameService.compare(numberResource, bindingResultTrue, this.gameService.getCurrentGameId());
   }
 
   @Test(expected = ValidationException.class)
@@ -170,7 +170,7 @@ public class GameServiceImplTest {
     Game game = this.gameService.createGame();
     NumberResource numberResource = new NumberResource();
     numberResource.setNumber("1233");
-    this.gameService.compare(numberResource, bindingResultFalse);
+    this.gameService.compare(numberResource, bindingResultFalse, this.gameService.getCurrentGameId());
   }
 
   @Test(expected = ValidationException.class)
@@ -180,7 +180,7 @@ public class GameServiceImplTest {
     Game game = this.gameService.createGame();
     NumberResource numberResource = new NumberResource();
     numberResource.setNumber("123r");
-    this.gameService.compare(numberResource, bindingResultFalse);
+    this.gameService.compare(numberResource, bindingResultFalse, this.gameService.getCurrentGameId());
   }
 
 
@@ -191,7 +191,7 @@ public class GameServiceImplTest {
     Game game = this.gameService.createGame();
     NumberResource numberResource = new NumberResource();
     numberResource.setNumber("1234");
-    List<CowsAndBulls> cowsAndBulls = this.gameService.compare(numberResource, bindingResultFalse);
+    List<CowsAndBulls> cowsAndBulls = this.gameService.compare(numberResource, bindingResultFalse, this.gameService.getCurrentGameId());
     Assert.assertEquals(1, cowsAndBulls.size());
   }
 
