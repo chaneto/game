@@ -96,7 +96,7 @@ public class GameServiceImplTest {
     Game game = this.gameService.createGame();
     Assert.assertNotNull(game);
     Assert.assertNull(game.getEndDate());
-    game = this.gameService.finishGame();
+    game = this.gameService.finishGame(game);
     Assert.assertNotNull(game.getEndDate());
   }
 

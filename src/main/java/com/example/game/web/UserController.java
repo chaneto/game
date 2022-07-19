@@ -25,8 +25,8 @@ public class UserController {
   private final GameAssembler gameAssembler;
 
   @Autowired
-  public UserController(UserService userService,
-    UserAssembler userAssembler, GameAssembler gameAssembler) {
+  public UserController(UserService userService, UserAssembler userAssembler,
+    GameAssembler gameAssembler) {
     this.userService = userService;
     this.userAssembler = userAssembler;
     this.gameAssembler = gameAssembler;

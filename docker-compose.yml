@@ -1,5 +1,29 @@
 version: '3.8'
 services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+      TZ: Europe/Sofia
+    ports:
+      - 22181:2181
+
+  kafka:
+    image: confluentinc/cp-kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - 29092:29092
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_INTER_BROKER_LISTENER_NAME: CLIENT
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CLIENT:PLAINTEXT, HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: CLIENT://kafka:9092, HOST://localhost:29092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      TZ: Europe/Sofia
+
   redis:
     image: redis:alpine
     container_name: redis_db
@@ -12,6 +36,7 @@ services:
     restart: always
     environment:
       - TZ=Europe/Sofia
+
   db:
     image: postgres:14.1-alpine
     restart: always
@@ -21,6 +46,7 @@ services:
       - POSTGRES_USER=chaneto
       - POSTGRES_PASSWORD=12345
       - TZ=Europe/Sofia
+
   api:
     container_name: game-container
     build:

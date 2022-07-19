@@ -68,19 +68,6 @@ public class GameServiceImpl implements GameService {
   }
 
   @Override
-  public Game finishGame() {
-    Game game =
-      this.gameRepository.findById(this.userService.getCurrentUser().getCurrentGame().getId())
-        .orElseThrow(() -> new NullPointerException("This game cannot be found!!!"));
-    game.setCompleted(true);
-    game.setEndDate(LocalDateTime.now());
-    long numberAttempts = game.getGameHistory().size();
-    game.setNumberOfAttempts(numberAttempts);
-    this.userService.setCurrentGameToNull();
-    return saveGame(game);
-  }
-
-  @Override
   @Cacheable(value = "continue", key = "#id")
   public Game continueGame(Long id) {
     Game game = this.gameRepository.findById(id)
@@ -115,20 +102,30 @@ public class GameServiceImpl implements GameService {
     return this.gameRepository.findAllByUserId(this.userService.getCurrentUser().getId());
   }
 
-  public void createAndSaveCowsAndBulls(String currentNumber,int cows,int bulls, Game currentGame) {
+  public void createAndSaveCowsAndBulls(String currentNumber, int cows, int bulls,
+    Game currentGame) {
     CowsAndBulls cowsAndBulls = new CowsAndBulls(currentNumber, cows, bulls, currentGame);
     this.cowsAndBullsRepository.save(cowsAndBulls);
   }
 
   @Override
-  public Long getCurrentGameId(){
-  return this.userService.getCurrentUser().getCurrentGame().getId();
+  public Long getCurrentGameId() {
+    return this.userService.getCurrentUser().getCurrentGame().getId();
   }
 
   @Override
-  @Caching(evict = { @CacheEvict(value = {"games", "continue"}, allEntries = true)},
-    put = { @CachePut(value = {"history"}, key = "#currentGameId")})
-  public List<CowsAndBulls> compare(NumberResource currentNumber, BindingResult bindingResult, Long currentGameId) {
+  public Game finishGame(Game game) {
+    game.setCompleted(true);
+    game.setEndDate(LocalDateTime.now());
+    this.userService.setCurrentGameToCurrentUserToNull();
+    return game;
+  }
+
+  @Override
+  @Caching(evict = {@CacheEvict(value = {"games", "continue"}, allEntries = true)},
+    put = {@CachePut(value = {"history"}, key = "#currentGameId")})
+  public List<CowsAndBulls> compare(NumberResource currentNumber, BindingResult bindingResult,
+    Long currentGameId) {
     if (bindingResult.hasErrors()) {
       throw new ValidationException(
         this.userService.getAllBindingsErrors(bindingResult).toString());
@@ -149,22 +146,24 @@ public class GameServiceImpl implements GameService {
     if (!isAllSymbolsIsDigit(currentNum)) {
       throw new ValidationException("Must all symbols is digit!!!");
     }
-
-    Integer[] cowsAndBullsCompare = getCowsAndBulls(currentNum, serverNum, getCurrentGameId());
+    Integer[] cowsAndBullsCompare = getCowsAndBulls(currentNum, serverNum);
     int cows = cowsAndBullsCompare[0];
     int bulls = cowsAndBullsCompare[1];
-    createAndSaveCowsAndBulls(currentNumber.getNumber(), cows, bulls, this.gameRepository.findById(currentGameId).orElseThrow(() -> new NullPointerException("This game cannot be found!!!")));
+    createAndSaveCowsAndBulls(currentNumber.getNumber(), cows, bulls,
+      this.gameRepository.findById(currentGameId)
+        .orElseThrow(() -> new NullPointerException("This game cannot be found!!!")));
+    Game game = this.gameRepository.findById(currentGameId)
+      .orElseThrow(() -> new NullPointerException("This game cannot be found!!!"));
     if (bulls == 4) {
-      finishGame();
+      game = finishGame(game);
     }
-    Game game = this.gameRepository.findById(currentGameId).orElseThrow(() -> new NullPointerException("This game cannot be found!!!"));;
     long numberAttempts = game.getGameHistory().size();
     game.setNumberOfAttempts(numberAttempts);
     this.gameRepository.save(game);
     return game.getGameHistory();
   }
 
-  public Integer[] getCowsAndBulls( Character[] currentNum, Character[] serverNum, Long id){
+  public Integer[] getCowsAndBulls(Character[] currentNum, Character[] serverNum) {
     int cows = 0;
     int bulls = 0;
     for (int i = 0; i < 4; i++) {
@@ -177,7 +176,7 @@ public class GameServiceImpl implements GameService {
         }
       }
     }
-    return new Integer[]{cows, bulls};
+    return new Integer[] {cows, bulls};
   }
 
   public boolean isAllDigitsIsDifferent(Character[] currentNumber) {

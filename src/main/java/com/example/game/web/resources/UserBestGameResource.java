@@ -1,6 +1,5 @@
 package com.example.game.web.resources;
 
-
 import java.io.Serializable;
 
 public class UserBestGameResource implements Serializable {

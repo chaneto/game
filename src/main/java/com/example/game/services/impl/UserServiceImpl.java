@@ -12,9 +12,13 @@ import com.example.game.repositories.UserRepository;
 import com.example.game.services.UserService;
 import com.example.game.web.resources.UserBestGameResource;
 import com.example.game.web.resources.UserCreateResource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,21 +30,27 @@ import org.springframework.validation.BindingResult;
 @Service
 public class UserServiceImpl implements UserService {
 
+  private static final String TOPIC = "users-register";
+  private static final String GROUP_ID = "register_group";
+  private static final Logger logger = LoggerFactory.getLogger(User.class);
+
+  private final KafkaTemplate<String, Object> kafkaTemplate;
   private final UserRepository userRepository;
   private final GameUserDetailService gameUserDetailService;
   private final PasswordEncoder passwordEncoder;
 
   @Autowired
-  public UserServiceImpl(UserRepository userRepository,
-    GameUserDetailService gameUserDetailService,
+  public UserServiceImpl(KafkaTemplate<String, Object> kafkaTemplate,
+    UserRepository userRepository, GameUserDetailService gameUserDetailService,
     PasswordEncoder passwordEncoder) {
+    this.kafkaTemplate = kafkaTemplate;
     this.userRepository = userRepository;
     this.gameUserDetailService = gameUserDetailService;
     this.passwordEncoder = passwordEncoder;
   }
 
   @Override
-   public User validateAndSafeUser(UserCreateResource userCreateResource,
+  public User validateAndSafeUser(UserCreateResource userCreateResource,
     BindingResult bindingResult) {
     User user = new User();
     if (bindingResult.hasErrors()) {
@@ -52,8 +62,15 @@ public class UserServiceImpl implements UserService {
     } else {
       user.setUsername(userCreateResource.getUsername());
       user.setPassword(this.passwordEncoder.encode(userCreateResource.getPassword()));
-      return this.userRepository.save(user);
+      this.kafkaTemplate.send(TOPIC, user);
+      return user;
     }
+  }
+
+  @KafkaListener(topics = TOPIC, groupId = GROUP_ID)
+  public void saveUser(User user) {
+    this.userRepository.save(user);
+    logger.info("REGISTERED NEW USER: " + user.getUsername());
   }
 
   @Override
@@ -78,13 +95,13 @@ public class UserServiceImpl implements UserService {
     return this.userRepository.findByUsername(userDetails.getUsername());
   }
 
-  @Override public void setCurrentGame(Game currentGame, Long id) {
-    this.userRepository.setCurrentGame(currentGame, id);
+  @Override public void setCurrentGame(Game currentGame, Long userId) {
+    this.userRepository.setCurrentGame(currentGame, userId);
   }
 
   @Override
   @CacheEvict(value = "users")
-  public void setCurrentGameToNull() {
+  public void setCurrentGameToCurrentUserToNull() {
     this.userRepository.setCurrentGame(null, getCurrentUser().getId());
   }
 
@@ -111,7 +128,8 @@ public class UserServiceImpl implements UserService {
   }
 
   public void authenticate(UserCreateResource userCreateResource) {
-    UserDetails principal = this.gameUserDetailService.loadUserByUsername(userCreateResource.getUsername());
+    UserDetails principal =
+      this.gameUserDetailService.loadUserByUsername(userCreateResource.getUsername());
     if (!this.passwordEncoder.matches(userCreateResource.getPassword(), principal.getPassword())) {
       throw new LoginException("Bad credentials!!!");
     }

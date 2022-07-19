@@ -4,8 +4,6 @@ import java.util.List;
 import com.example.game.model.entities.CowsAndBulls;
 import com.example.game.model.entities.Game;
 import com.example.game.web.resources.NumberResource;
-
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.validation.BindingResult;
 
 public interface GameService {
@@ -15,13 +13,13 @@ public interface GameService {
 
   Game createGame();
 
-  Game finishGame();
+  Game finishGame(Game game);
 
   boolean isAllDigitsIsDifferent(Character[] currentNumber);
 
   boolean isAllSymbolsIsDigit(Character[] currentNumber);
 
-  List<CowsAndBulls> compare(NumberResource currentNumber, BindingResult bindingResult, Long currentGameId);
+  List<CowsAndBulls> compare(NumberResource currentNumber, BindingResult bindingResult, Long id);
 
   String getFourDigitsNumber();
 

@@ -24,8 +24,7 @@ public class GameController {
   private final GameAssembler gameAssembler;
 
   @Autowired
-  public GameController(GameService gameService,
-    GameAssembler gameAssembler) {
+  public GameController(GameService gameService, GameAssembler gameAssembler) {
     this.gameService = gameService;
     this.gameAssembler = gameAssembler;
   }
@@ -49,7 +48,7 @@ public class GameController {
   @PostMapping("/compare")
   public ResponseEntity<List<CowsAndBullsResource>> compare(
     @RequestBody @Valid NumberResource numberResource, BindingResult bindingResult) {
-    Long gameId  = this.gameService.getCurrentGameId();
+    Long gameId = this.gameService.getCurrentGameId();
     List<CowsAndBulls> cowsAndBulls = this.gameService.compare(numberResource, bindingResult, gameId);
     return new ResponseEntity<>(this.gameAssembler.assembleCowsAndBullsResource(cowsAndBulls),
       HttpStatus.OK);

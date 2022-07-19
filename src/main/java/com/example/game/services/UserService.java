@@ -8,6 +8,7 @@ import com.example.game.web.resources.UserCreateResource;
 import org.springframework.validation.BindingResult;
 
 public interface UserService {
+  void saveUser(User user);
 
   User validateAndSafeUser(UserCreateResource userCreateResource, BindingResult bindingResult);
 
@@ -25,6 +26,6 @@ public interface UserService {
 
   void setCurrentGame(Game currentGame, Long id);
 
-  public void setCurrentGameToNull();
+  public void setCurrentGameToCurrentUserToNull();
 
 }
