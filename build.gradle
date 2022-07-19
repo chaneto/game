@@ -26,6 +26,7 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 	testImplementation group: 'com.h2database', name: 'h2', version: '2.1.212'
 	testImplementation group: 'junit', name: 'junit', version: '4.13.2'
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-cache', version: '2.6.6'
 }
 
 tasks.named('test') {
