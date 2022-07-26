@@ -1,3 +1,9 @@
+#welcome{
+top: -3px;
+left: 471px;
+position: absolute;
+color: yellow;
+}
 
 .card {
     min-width: 18rem;

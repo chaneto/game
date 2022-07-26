@@ -14,6 +14,7 @@ export async function logout() {
             throw new Error("Invalid request!!!");
           }
           sessionStorage.removeItem("userdata");
+          document.cookie = "username=; max-age=0";
           pageNumber.textContent = 1;
           updateUserNav();
           return dashboardPage();

@@ -26,9 +26,8 @@ export async function loginPage() {
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify(data)
                  }
-    
-     try {
 
+                   try {
                     const res = await fetch(url, option);
                     const resData = await res.json();
                    if(!res.ok){
@@ -41,7 +40,9 @@ export async function loginPage() {
                         id: resData._id,
                         token: resData.accessToken
                     }
+
                     sessionStorage.setItem("userdata", JSON.stringify(userdata));
+                    document.cookie = "username=" + resData.username + "; path=/; max-age=" + 30 * 60;
                     updateUserNav();
                     username.value = "";
                     password.value = "";
