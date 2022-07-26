@@ -40,9 +40,6 @@ export function updateUserNav() {
     }
 }
 
-//let homeBtn = document.querySelector("#home");
-//homeBtn.addEventListener("click", updateUserNav());
-
 function checkCookie() {
     let dataCookie = document.cookie
     if(dataCookie != "") {
