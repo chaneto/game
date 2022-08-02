@@ -56,7 +56,7 @@ public class UserController {
 
   @ApiOperation(httpMethod = "GET", value = "All registered users.", response = UserBestGameResource.class)
   @GetMapping("/a")
-  public ResponseEntity<List<UserBestGameResource>> getAllUserWithBestGam() {
+  public ResponseEntity<List<UserBestGameResource>> getAllUserWithBestGame() {
     return new ResponseEntity<>(this.userService.getAllUserWithBestGame(), HttpStatus.OK);
   }
 
