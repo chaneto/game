@@ -27,7 +27,7 @@ logoutBtn.addEventListener("click", logout);
 
 
 export function updateUserNav() {
-    let userdata = JSON.parse(sessionStorage.getItem("userdata"));
+    let userdata = JSON.parse(localStorage.getItem("userdata"));
     if(userdata){
       document.getElementById("user").style.display = "";
       document.getElementById("guest").style.display = "none";
@@ -43,7 +43,7 @@ export function updateUserNav() {
 function checkCookie() {
     let dataCookie = document.cookie
     if(dataCookie != "") {
-    return dataCookie.split("=")[1];
+    return dataCookie.split("=")[4];
     } else {
     return null;
     }
@@ -56,7 +56,7 @@ let cookies = checkCookie();
     }
 
 if(cookies != null){
-sessionStorage.setItem("userdata", JSON.stringify(userdata));
+ localStorage.setItem("userdata", JSON.stringify(userdata));
 }
 
 async function onIsLogged(params) {
@@ -71,7 +71,7 @@ if(!isLogged){
     if(!res.ok){
         throw new Error("Invalid request!!!");
       }
-      sessionStorage.removeItem("userdata");
+      localStorage.removeItem("userdata");
      
 } catch (error) {
     alert(error.message);

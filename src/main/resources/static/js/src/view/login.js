@@ -40,8 +40,7 @@ export async function loginPage() {
                         id: resData._id,
                         token: resData.accessToken
                     }
-
-                    sessionStorage.setItem("userdata", JSON.stringify(userdata));
+                    localStorage.setItem("userdata", JSON.stringify(userdata));
                     document.cookie = "username=" + resData.username + "; path=/; max-age=" + 30 * 60;
                     updateUserNav();
                     username.value = "";

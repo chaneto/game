@@ -13,7 +13,7 @@ export async function logout() {
         if(!res.ok){
             throw new Error("Invalid request!!!");
           }
-          sessionStorage.removeItem("userdata");
+          localStorage.removeItem("userdata");
           document.cookie = "username=; max-age=0";
           pageNumber.textContent = 1;
           updateUserNav();
