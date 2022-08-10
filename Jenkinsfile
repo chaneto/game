@@ -6,7 +6,7 @@ pipeline {
 
     triggers {
         cron('H */8 * * *') //regular builds
-        pollSCM('* * * * *') //polling for changes, here once a minute
+       // pollSCM('* * * * *') //polling for changes, here once a minute
     }
 
     stages {
