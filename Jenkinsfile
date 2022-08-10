@@ -2,31 +2,19 @@ pipeline {
     agent any
 
     stages {
-        stage ('Compile Stage') {
-
+        stage('Build') {
             steps {
-		    sh "gradle build"
-		   // bat "gradle build"
-               }
-        }
-
-        stage ('Testing Stage') {
-
-            steps {
-
-                     sh "gradle test"
-		    // bat "gradle test"
-
-
+                echo 'Building..'
             }
         }
-
-
-        stage ('Deployment Stage') {
+        stage('Test') {
             steps {
-
-                   sh "gradle deploy"
-		//bat "gradle deploy"
+                echo 'Testing..'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                echo 'Deploying....'
             }
         }
     }
