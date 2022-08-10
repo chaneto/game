@@ -34,7 +34,7 @@ pipeline {
         pollSCM('*/5 * * * *')
     }
 
-//     stages {
+    stages {
 //         stage('Compile') {
 //             steps {
 //                 gradlew('clean', 'classes')
@@ -46,7 +46,7 @@ pipeline {
             }
             post {
                 always {
-                    junit '**/build/tests/test/TEST-*.xml'
+                    junit '**/build/test-results/test/TEST-*.xml'
                 }
             }
         }
