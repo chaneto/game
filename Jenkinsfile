@@ -22,14 +22,14 @@ pipeline {
         bat 'gradle build'
         bat 'gradle javadoc'
         archiveArtifacts 'build/libs/*.jar'
-        archiveArtifacts 'build/docs/javadoc/*'
-        junit 'build/test-results/test/*.xml'
+        //archiveArtifacts 'build/docs/javadoc/*'
+        //junit 'build/test-results/test/*.xml'
       }
     }
 
     stage('Mail Notification') {
       steps {
-        mail(subject: 'Build Notification', body: "${message}", from: 'ga_tadjer@esi.dz', to: 'gn_fekir@esi.dz')
+        mail(subject: 'Build Notification', body: "${message}", from: 'ga_tadjer@esi.dz', to: 'chaneto_80@abv.bg')
       }
     }
 
