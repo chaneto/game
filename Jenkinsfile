@@ -1,31 +1,55 @@
-node {
-   stage('Get source code') {
-      echo 'getting source code'
-      git url: 'https://github.com/hivp/hellofrom.git', branch: 'kafka'
-   }
-   stage('Build with Gradle') {
-      if(isUnix()) {
-        sh './gradlew clean build'
-      } else {
-        bat 'gradlew.bat clean build'
+
+pipeline {
+    agent any
+
+    triggers {
+        pollSCM('H/5 * * * *')
+        cron('@midnight')
+    }
+
+    stages {
+
+        stage('Test') {
+            steps {
+               echo 'Test....'
+               sh "./gradlew clean test"
+            }
+        }
+        stage('Build Docker') {
+            steps {
+                echo 'Build Docker....'
+                sh "./gradlew build"
+            }
+        }
+    }
+
+    post {
+      // Always runs. And it runs before any of the other post conditions.
+      always {
+         archive "target/**/*"
+         junit allowEmptyResults: true, keepLongStdio: true, testResults: 'build/test-results/test/*.xml'
+         publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'build/reports/tests/test/', reportFiles: 'index.html', reportName: 'HTML Report', reportTitles: ''])
+
+         // Wipe the workspace so we are building completely clean
+         //deleteDir();
       }
-   }
-   stage('Generate docker image in local registry') {
-      if(isUnix()) {
-        sh 'docker build -t hellofrom:1.0 .'
-      } else {
-        bat 'docker build -t hellofrom:1.0 .'
+
+      success {
+             echo 'Success....'
+             archiveArtifacts 'build/libs/*.jar'
+             echo 'Archive artifacts....'
+             echo 'Clean Workspace....'
+             cleanWs()
+            //mail(from: "bob@example.com", to: "steve@example.com", subject: "That build passed.", body: "Nothing to see here")
       }
-   }
-   /*
-   stage('Upload to Docker Hub'){
-     if(isUnix()) {
-       sh 'docker tag hellofrom:1.0 hugovarela/hellofrom:1.0'
-       sh 'docker push hugovarela/hellofrom:1.0'
-     } else {
-       bat 'docker tag hellofrom:1.0 hugovarela/hellofrom:1.0'
-       bat 'docker push hugovarela/hellofrom:1.0'
-     }
-   }
-*/
+
+      failure {
+              echo 'Failure....'
+              echo 'Clean Workspace....'
+              cleanWs()
+            //mail(from: "bob@example.com", to: "steve@example.com", subject: "That build failed!", body: "Nothing to see here")
+      }
+    }
+
+}
 }
