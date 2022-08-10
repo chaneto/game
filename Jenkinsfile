@@ -1,35 +1,34 @@
 pipeline {
-
-    agent any
-
-    triggers {
-        cron('H */8 * * *') //regular builds
-        //cron('* * * * *') //regular builds
-        pollSCM('* * * * *') //polling for changes, here once a minute
+  agent any
+  stages {
+    stage('Gradle Build') {
+      steps {
+        sh 'gradle clean build'
+      }
     }
-
-    stages {
-        stage('Build') {
-            steps {
-                echo 'Building..'
-            }
-        }
-        stage('Test') {
-            steps {
-                echo 'Testing..'
-            }
-        }
-        stage('Deploy') {
-            steps {
-                echo 'Deploying....'
-            }
-        }
+    stage('Veracode Pipeline Scan') {
+      steps {
+        sh 'curl -O https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip'
+        sh 'unzip pipeline-scan-LATEST.zip pipeline-scan.jar'
+        sh 'java -jar pipeline-scan.jar \
+          --veracode_api_id "${VERACODE_API_ID}" \
+          --veracode_api_key "${VERACODE_API_SECRET}" \
+          --file "build/libs/sample.jar" \
+          --fail_on_severity="Very High, High" \
+          --fail_on_cwe="80" \
+          --baseline_file "${CI_BASELINE_PATH}" \
+          --timeout "${CI_TIMEOUT}" \
+          --project_name "${env.JOB_NAME}" \
+          --project_url "${env.GIT_URL}" \
+          --project_ref "${env.GIT_COMMIT}"'
+      }
     }
-    post {
-         failure {
-                   mail to: 'chaneto_80@abv.bg', subject: 'Build failed', body: 'Please fix!'
-               }
+  }
+  post {
+    always {
+      archiveArtifacts artifacts: 'results.json', fingerprint: true
     }
+  }
 }
 
 def gradlew(String... args) {
