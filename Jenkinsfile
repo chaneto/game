@@ -19,7 +19,7 @@ pipeline {
 
       }
       steps {
-        bat 'gradle build'
+        //bat 'gradle build'
         //bat 'gradle javadoc'
         archiveArtifacts 'build/libs/*.jar'
         //archiveArtifacts 'build/docs/javadoc/*'
@@ -29,7 +29,7 @@ pipeline {
 
     stage('Mail Notification') {
       steps {
-        mail(subject: 'Build Notification', body: "${message}", from: 'ga_tadjer@esi.dz', to: 'chaneto_80@abv.bg')
+        mail(subject: 'Build Notification', body: "${message}", from: 'stoyan.stoyanov@brainstarstech.com', to: 'chaneto_80@abv.bg')
       }
     }
 
@@ -56,7 +56,7 @@ pipeline {
 
     stage('Deployment') {
       when {
-        branch 'master'
+        branch '*'
       }
       steps {
         bat 'gradle publish'
@@ -65,10 +65,10 @@ pipeline {
 
     stage('slack ') {
       when {
-        branch 'master'
+        branch '*'
       }
       steps {
-        slackSend(baseUrl: 'https://hooks.slack.com/services/', teamDomain: 'outils-workspace', token: 'TRQ5TN6LD/BSSUG0EF5/3OyM02whwrisz384YnM9T5ey', message: 'deployee', channel: 'general')
+        slackSend(baseUrl: 'https://hooks.slack.com/services/', teamDomain: 'outils-workspace', token: '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', message: 'deployee', channel: 'general')
       }
     }
 
