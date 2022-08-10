@@ -26,11 +26,9 @@ pipeline {
         }
     }
     post {
-        always { //Send an email to the person that broke the build
-            step([$class                  : 'Mailer',
-                  notifyEveryUnstableBuild: true,
-                  recipients              : [emailextrecipients([[$class: 'CulpritsRecipientProvider'], [$class: 'RequesterRecipientProvider']])].join(' ')])
-        }
+         failure {
+                   mail to: 'chaneto_80@abv.bg', subject: 'Build failed', body: 'Please fix!'
+               }
     }
 }
 
