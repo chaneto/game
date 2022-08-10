@@ -8,11 +8,11 @@ pipeline {
 //         SERVICE_NAME = 'service-api'
 //     }
 
-    options {
-        disableConcurrentBuilds()
-        timeout(time: 30, unit: 'MINUTES')
-        buildDiscarder(logRotator(numToKeepStr: '20', artifactNumToKeepStr: '10'))
-    }
+//     options {
+//         disableConcurrentBuilds()
+//         timeout(time: 30, unit: 'MINUTES')
+//         buildDiscarder(logRotator(numToKeepStr: '20', artifactNumToKeepStr: '10'))
+//     }
 
     triggers {
         upstream(upstreamProjects: "e2e/${env.BRANCH_NAME.replaceAll('/', '%2F')}", threshold: hudson.model.Result.SUCCESS)
