@@ -2,11 +2,11 @@ pipeline {
 
     agent any
 
-    environment {
-        CURRENT_TIME = sh(script: 'date +%Y-%m-%d-%H-%M', returnStdout: true).trim()
-        CHANGE_AUTHOR_EMAIL = sh(script: "git --no-pager show -s --format='%ae'", returnStdout: true).trim()
-        SERVICE_NAME = 'service-api'
-    }
+//     environment {
+//         CURRENT_TIME = sh(script: 'date +%Y-%m-%d-%H-%M', returnStdout: true).trim()
+//         CHANGE_AUTHOR_EMAIL = sh(script: "git --no-pager show -s --format='%ae'", returnStdout: true).trim()
+//         SERVICE_NAME = 'service-api'
+//     }
 
     options {
         disableConcurrentBuilds()
