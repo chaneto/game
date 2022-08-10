@@ -1,50 +1,33 @@
-pipeline {
-  agent any
-  stages {
-
-    stage('ready application') {
-      parallel {
-        stage('compile') {
-          steps {
-            sh './gradlew classes'
-          }
-        }
-
-        stage('test') {
-          steps {
-            sh './gradlew test'
-          }
-        }
-
-      }
+node('dockerserver')
+{
+    stage('Checkout')
+    {
+        step([$class: 'WsCleanup'])
+        checkout scm
     }
 
-    stage('run checks') {
-      parallel {
-        stage('checkstyle') {
-          steps {
-            sh './gradlew check'
-          }
+    docker.image('frekele/gradle').inside
+    {
+        stage('Compile')
+        {
+            gradle "assemble"
         }
-
-        stage('security checks') {
-          steps {
-            sh './gradlew dependencyCheckAnalyze'
-          }
+        stage("Test")
+        {
+            gradle "test"
         }
+    }
+}
 
-      }
+void gradle(String tasks, String switches = null) {
+    String gradleCommand = "";
+    gradleCommand += 'gradle '
+    gradleCommand += tasks
+
+    if (switches != null) {
+        gradleCommand += ' '
+        gradleCommand += switches
     }
 
-    stage('Staging') {
-      steps {
-        echo 'Build Docker image'
-        sh './gradlew dockerBuildImage'
-      }
-    }
-
-  }
-  tools {
-    gradle 'gradle6.5'
-  }
+    sh gradleCommand.toString()
 }
