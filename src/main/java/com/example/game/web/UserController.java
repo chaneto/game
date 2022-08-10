@@ -53,7 +53,4 @@ public class UserController {
   public ResponseEntity<List<UserBestGameResource>> getAllUserWithBestGame() {
     return new ResponseEntity<>(this.userService.getAllUserWithBestGame(), HttpStatus.OK);
   }
-
-
-  ppppppppppppppp
 }
