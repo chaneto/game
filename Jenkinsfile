@@ -1,99 +1,76 @@
 pipeline {
-	agent any
+  agent any
+  stages {
+    stage('Build') {
+      post {
+        failure {
+          script {
+            message="failure"
+          }
 
-	environment {
-		CC = 'Starting pipeline...'
-	}
-
-	stages {
-		stage('Clean'){
-			steps{
-				echo  '>>>>>>>>>> ' + CC
-				echo 'Cleaning..'
-				script {
-					if(isUnix()){
-					  sh 'gradle clean'
-					} else {
-						bat 'gradle clean'
-					}
-				}
-			}
-		}
-		stage('Checkout'){
-			steps {
-				echo 'Checkout..'
-				checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '35b526e5-7e1e-4fe2-afb4-fde2a7b1b743', url: 'https://cismael@bitbucket.org/cismael/androidapplication01.git']]])
-			}
-		}
-		stage('Build') {
-			steps {
-				echo 'Building..'
-				script {
-					if(isUnix()){
-					  echo 'UNIX--------------------------------'
-					  sh 'gradle build --info'
-					} else {
-						echo 'WINDOWS---------------------------'
-						bat 'gradle build --info'
-					}
-				}
-			}
-		}
-        stage ("SonarQube Analysis") {
-            steps {
-                script {
-                    // def SonarScannerHome = tool 'SonarQubeScanner';
-                    // withSonarQubeEnv('SonarQubeServer') {
-                    // bat "${SonarScannerHome}/bin/sonar-scanner"
-                    // bat 'gradle --info sonarqube'
-
-                    withSonarQubeEnv('SonarQubeServer') {
-                        buildInfo.env.capture = false // verzamel hier niet de build info
-                        gradle.deployer.deployArtifacts = false // artifacts moeten niet gedeployed worden
-                        gradle.run(
-                                rootDir: '',
-                                buildFile: 'build.gradle',
-                                tasks: 'sonarqube',
-                                buildInfo: buildInfo,
-                                switches: params.release ? '-Prelease' : '')
-                    }
-                }
-            }
         }
-		stage('Test') {
-			steps {
-				echo 'Testing..'
-				script {
-					if(isUnix()){
-					  sh 'gradle test'
-					} else {
-						bat 'gradle test'
-					}
-				}
-			}
-		}
-		stage('Archivage'){
-			steps{
-				echo 'Archiving Artefact....'
-				archiveArtifacts 'app/build/outputs/apk/**/*.apk'
-			}
-		}
-		stage('Publish JUnit Test Results') {
-			steps{
-				echo 'Publishing AndroidLint Results....'
-				junit '**/build/test-results/**/*.xml'
-			}
-		}
-		stage('Publish AndroidLint Results') {
-			steps{
-				echo 'Publishing AndroidLint Results....'
-				androidLint canComputeNew: false, defaultEncoding: '', healthy: '', pattern: '**/build/reports/lint-results.xml', unHealthy: ''
-			}
-		}
-		stage('Deploy') {
-			steps {
-				echo 'Deploying....'
-			}
-		}
-	}
+
+        success {
+          script {
+            message="Success"
+          }
+
+        }
+
+      }
+      steps {
+        bat 'gradle build'
+        bat 'gradle javadoc'
+        archiveArtifacts 'build/libs/*.jar'
+        archiveArtifacts 'build/docs/javadoc/*'
+        junit 'build/test-results/test/*.xml'
+      }
+    }
+
+    stage('Mail Notification') {
+      steps {
+        mail(subject: 'Build Notification', body: "${message}", from: 'ga_tadjer@esi.dz', to: 'gn_fekir@esi.dz')
+      }
+    }
+
+    stage('Code Analysis') {
+      parallel {
+        stage('Code Analysis') {
+          steps {
+            withSonarQubeEnv('sonar') {
+              bat 'gradle sonarqube'
+            }
+
+            waitForQualityGate true
+          }
+        }
+
+        stage('Test Reporting') {
+          steps {
+            jacoco(execPattern: 'build/jacoco/*.exec', exclusionPattern: '**/test/*.class')
+          }
+        }
+
+      }
+    }
+
+    stage('Deployment') {
+      when {
+        branch 'master'
+      }
+      steps {
+        bat 'gradle publish'
+      }
+    }
+
+    stage('slack ') {
+      when {
+        branch 'master'
+      }
+      steps {
+        slackSend(baseUrl: 'https://hooks.slack.com/services/', teamDomain: 'outils-workspace', token: 'TRQ5TN6LD/BSSUG0EF5/3OyM02whwrisz384YnM9T5ey', message: 'deployee', channel: 'general')
+      }
+    }
+
+  }
 }
