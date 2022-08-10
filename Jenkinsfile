@@ -7,8 +7,16 @@ agent any
            }
         }
         stage ('Test') {
-         steps { echo 'Tests..'
-            }
+//          steps { echo 'Tests..'
+//             }
+             steps {
+                           gradlew('test')
+                       }
+                       post {
+                           always {
+                               junit '**/build/test-results/test/TEST-*.xml'
+                           }
+                       }
         }
         stage ('QA') {
           steps { echo 'QA..'
