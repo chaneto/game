@@ -1,36 +1,99 @@
 pipeline {
-  agent any
-  stages {
-    stage('Gradle Build') {
-      steps {
-        sh 'gradle clean build'
-      }
-    }
-    stage('Veracode Pipeline Scan') {
-      steps {
-        sh 'curl -O https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip'
-        sh 'unzip pipeline-scan-LATEST.zip pipeline-scan.jar'
-        sh 'java -jar pipeline-scan.jar \
-          --veracode_api_id "${VERACODE_API_ID}" \
-          --veracode_api_key "${VERACODE_API_SECRET}" \
-          --file "build/libs/sample.jar" \
-          --fail_on_severity="Very High, High" \
-          --fail_on_cwe="80" \
-          --baseline_file "${CI_BASELINE_PATH}" \
-          --timeout "${CI_TIMEOUT}" \
-          --project_name "${env.JOB_NAME}" \
-          --project_url "${env.GIT_URL}" \
-          --project_ref "${env.GIT_COMMIT}"'
-      }
-    }
-  }
-  post {
-    always {
-      archiveArtifacts artifacts: 'results.json', fingerprint: true
-    }
-  }
-}
+	agent any
 
-def gradlew(String... args) {
-    sh "./gradlew ${args.join(' ')} -s"
+	environment {
+		CC = 'Starting pipeline...'
+	}
+
+	stages {
+		stage('Clean'){
+			steps{
+				echo  '>>>>>>>>>> ' + CC
+				echo 'Cleaning..'
+				script {
+					if(isUnix()){
+					  sh 'gradle clean'
+					} else {
+						bat 'gradle clean'
+					}
+				}
+			}
+		}
+		stage('Checkout'){
+			steps {
+				echo 'Checkout..'
+				checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '35b526e5-7e1e-4fe2-afb4-fde2a7b1b743', url: 'https://cismael@bitbucket.org/cismael/androidapplication01.git']]])
+			}
+		}
+		stage('Build') {
+			steps {
+				echo 'Building..'
+				script {
+					if(isUnix()){
+					  echo 'UNIX--------------------------------'
+					  sh 'gradle build --info'
+					} else {
+						echo 'WINDOWS---------------------------'
+						bat 'gradle build --info'
+					}
+				}
+			}
+		}
+        stage ("SonarQube Analysis") {
+            steps {
+                script {
+                    // def SonarScannerHome = tool 'SonarQubeScanner';
+                    // withSonarQubeEnv('SonarQubeServer') {
+                    // bat "${SonarScannerHome}/bin/sonar-scanner"
+                    // bat 'gradle --info sonarqube'
+
+                    withSonarQubeEnv('SonarQubeServer') {
+                        buildInfo.env.capture = false // verzamel hier niet de build info
+                        gradle.deployer.deployArtifacts = false // artifacts moeten niet gedeployed worden
+                        gradle.run(
+                                rootDir: '',
+                                buildFile: 'build.gradle',
+                                tasks: 'sonarqube',
+                                buildInfo: buildInfo,
+                                switches: params.release ? '-Prelease' : '')
+                    }
+                }
+            }
+        }
+		stage('Test') {
+			steps {
+				echo 'Testing..'
+				script {
+					if(isUnix()){
+					  sh 'gradle test'
+					} else {
+						bat 'gradle test'
+					}
+				}
+			}
+		}
+		stage('Archivage'){
+			steps{
+				echo 'Archiving Artefact....'
+				archiveArtifacts 'app/build/outputs/apk/**/*.apk'
+			}
+		}
+		stage('Publish JUnit Test Results') {
+			steps{
+				echo 'Publishing AndroidLint Results....'
+				junit '**/build/test-results/**/*.xml'
+			}
+		}
+		stage('Publish AndroidLint Results') {
+			steps{
+				echo 'Publishing AndroidLint Results....'
+				androidLint canComputeNew: false, defaultEncoding: '', healthy: '', pattern: '**/build/reports/lint-results.xml', unHealthy: ''
+			}
+		}
+		stage('Deploy') {
+			steps {
+				echo 'Deploying....'
+			}
+		}
+	}
 }
