@@ -20,7 +20,7 @@ pipeline {
       }
       steps {
         bat 'gradle build'
-        bat 'gradle javadoc'
+        //bat 'gradle javadoc'
         archiveArtifacts 'build/libs/*.jar'
         //archiveArtifacts 'build/docs/javadoc/*'
         //junit 'build/test-results/test/*.xml'
