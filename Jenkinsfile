@@ -17,7 +17,9 @@ pipeline {
            }
         }
         stage ('Unit Tests') {
-         steps { echo 'Tests..'
+         steps {
+            //echo 'Tests..'
+            sh './gradlew test'
             }
         }
         stage ('QA') {
@@ -36,7 +38,7 @@ pipeline {
     }
 
       post {
-            always {
+            failure {
                 mail to: 'chaneto_80@abv.bg', subject: 'Build failed', body: 'Please fix!'
             }
         }
