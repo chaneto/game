@@ -94,16 +94,16 @@ pipeline {
                 stash includes: '**/build/libs/*.jar', name: 'app'
             }
         }
-//         stage('Deploy to Production') {
-//             environment {
-//                 HEROKU_API_KEY = credentials('HEROKU_API_KEY')
-//             }
-//             steps {
-//                 unstash 'app'
-//                 gradlew('deployHeroku')
-//             }
-//         }
-//     }
+        stage('Deploy to Production') {
+            environment {
+                HEROKU_API_KEY = credentials('HEROKU_API_KEY')
+            }
+            steps {
+                unstash 'app'
+                gradlew('deployHeroku')
+            }
+        }
+    }
     post {
         failure {
             mail to: 'chaneto_80@abv.bg', subject: 'Build failed', body: 'Please fix!'
