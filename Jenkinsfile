@@ -91,7 +91,7 @@ pipeline {
         stage('Assemble') {
             steps {
                 gradlew('assemble')
-                stash includes: '**/build/libs/*.jar', name: 'app'
+                stash includes: '**/build/libs/*.jar', name: 'game'
             }
         }
         stage('Deploy to Production') {
