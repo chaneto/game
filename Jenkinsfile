@@ -14,15 +14,14 @@ pipeline {
     stages {
         stage ('Build') {
          steps {
-         //echo 'Building..'
-         sh 'make'
-         archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
+           echo 'Building..'
            }
         }
         stage ('Unit Tests') {
          steps {
             echo 'Tests..'
-            //sh './gradlew test'
+              sh 'make check || true'
+              junit '**/target/*.xml'
             }
         }
         stage ('QA') {
