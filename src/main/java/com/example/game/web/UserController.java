@@ -53,5 +53,5 @@ public class UserController {
   public ResponseEntity<List<UserBestGameResource>> getAllUserWithBestGame() {
     return new ResponseEntity<>(this.userService.getAllUserWithBestGame(), HttpStatus.OK);
   }
-  int a = 5;
+  int a = 5
 }
