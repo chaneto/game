@@ -50,12 +50,12 @@ pipeline {
         pollSCM('*/5 * * * *')
     }
 
-//     stages {
-//         stage('Compile') {
-//             steps {
-//                 gradlew('clean', 'classes')
-//             }
-//         }
+    stages {
+        stage('Compile') {
+            steps {
+                gradlew('clean', 'classes')
+            }
+        }
         stage('Unit Tests') {
             steps {
                 gradlew('test')
