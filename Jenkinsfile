@@ -16,7 +16,7 @@ pipeline {
          steps { echo 'Building..'
            }
         }
-        stage ('Test') {
+        stage ('Unit Tests') {
          steps { echo 'Tests..'
             }
         }
@@ -32,17 +32,6 @@ pipeline {
           steps { echo 'Monitor..'
               }
         }
-
-                stage('Unit Tests') {
-                    steps {
-                        gradlew('test')
-                    }
-                    post {
-                        always {
-                            junit '**/build/reports/tests/test/*.xml'
-                        }
-                    }
-                }
 
     }
 
