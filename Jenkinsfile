@@ -17,13 +17,25 @@ pipeline {
            echo 'Building..'
            }
         }
-        stage ('Test') {
-         steps {
-            //echo 'Tests..'
-             // sh 'make check || true'
-              junit '**/target/*.xml'
-            }
-        }
+//         stage ('Test') {
+//          steps {
+//             //echo 'Tests..'
+//              // sh 'make check || true'
+//               junit '**/target/*.xml'
+//             }
+//         }
+
+               stage('Unit Tests') {
+                    steps {
+                        gradlew('test')
+                    }
+                    post {
+                        always {
+                            junit '**/build/test-results/test/TEST-*.xml'
+                        }
+                    }
+                }
+
         stage ('QA') {
           steps { echo 'QA..'
               }
