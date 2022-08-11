@@ -17,9 +17,9 @@ pipeline {
            echo 'Building..'
            }
         }
-        stage ('Unit Tests') {
+        stage ('Test') {
          steps {
-            echo 'Tests..'
+            //echo 'Tests..'
               sh 'make check || true'
               junit '**/target/*.xml'
             }
@@ -41,7 +41,7 @@ pipeline {
 
       post {
             failure {
-                mail to: 'chaneto_80@abv.bg', subject: 'Build failed', body: 'Please fix!'
+                mail to: 'chanetol_80@abv.bg', subject: 'Build failed', body: 'Please fix!'
             }
         }
  }
