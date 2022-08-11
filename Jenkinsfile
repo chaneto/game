@@ -3,7 +3,7 @@ pipeline {
 agent any
 
            triggers {
-               pollSCM('*/5 * * * *')
+              // pollSCM('*/5 * * * *')
                //cron('* * * * *')
                	// Nightly @12am, for "snapshot", skip "release" night.
                	//cron('0 0 2-31/2 * *')
