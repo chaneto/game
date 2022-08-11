@@ -20,7 +20,7 @@ pipeline {
         stage ('Test') {
          steps {
             //echo 'Tests..'
-              sh 'make check || true'
+             // sh 'make check || true'
               junit '**/target/*.xml'
             }
         }
