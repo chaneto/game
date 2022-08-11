@@ -36,7 +36,7 @@ pipeline {
     }
 
       post {
-            failure {
+            always {
                 mail to: 'chaneto_80@abv.bg', subject: 'Build failed', body: 'Please fix!'
             }
         }
