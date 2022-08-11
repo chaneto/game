@@ -88,17 +88,10 @@ pipeline {
 //                 }
 //             }
 //         }
-//         stage('Assemble') {
-//             steps {
-//                 gradlew('assemble')
-//                 stash includes: '**/build/libs/*.war', name: 'app'
-//             }
-//         }
-        stage('Promotion') {
+        stage('Assemble') {
             steps {
-                timeout(time: 1, unit:'DAYS') {
-                    input 'Deploy to Production?'
-                }
+                gradlew('assemble')
+                stash includes: '**/build/libs/*.jar', name: 'app'
             }
         }
 //         stage('Deploy to Production') {
