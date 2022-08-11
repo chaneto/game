@@ -31,7 +31,7 @@ pipeline {
                     }
                     post {
                         always {
-                            junit '**/build/test-results/test/TEST-*.xml'
+                            junit '**/build/test-results/test/TEST-com.example.game.GameApplicationTests.xml'
                         }
                     }
                 }
