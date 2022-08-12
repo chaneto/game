@@ -19,22 +19,23 @@ pipeline {
         }
         stage ('Test') {
          steps {
-            //echo 'Tests..'
-             // sh 'make check || true'
-              junit '**/target/*.xml'
+            echo 'Tests..'
             }
         }
 
         stage ('QA') {
-          steps { echo 'QA..'
+          steps {
+             echo 'QA..'
               }
         }
         stage ('Deploy') {
-          steps { echo 'Deploy..'
+          steps {
+              echo 'Deploy..'
               }
         }
         stage ('Monitor') {
-          steps { echo 'Monitor..'
+          steps {
+              echo 'Monitor..'
               }
         }
 
