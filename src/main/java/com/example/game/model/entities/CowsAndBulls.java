@@ -36,6 +36,7 @@ public class CowsAndBulls implements Serializable {
   public CowsAndBulls(String number, Integer cows, Integer bulls,
     Game game) {
     this.number = number;
+    lll
     this.cows = cows;
     this.bulls = bulls;
     this.game = game;
